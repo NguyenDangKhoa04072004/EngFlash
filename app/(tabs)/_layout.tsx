@@ -31,6 +31,16 @@ export default function TabsLayout() {
           ),
         }}
       />
+        <Tabs.Screen
+            name='study'
+            options={{
+                href:null,
+                tabBarStyle:{
+                    display:'none'
+                }
+            }}
+        >
+        </Tabs.Screen>
       <Tabs.Screen
         name="productivity"
         options={{
