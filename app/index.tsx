@@ -10,7 +10,7 @@ import { Button } from "react-native-elements";
 import Onboarding from "react-native-onboarding-swiper";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { LinearGradient } from "expo-linear-gradient";
-import { Redirect } from "expo-router";
+import { Redirect, useRouter } from "expo-router";
 
 const { width, height } = Dimensions.get("window");
 
@@ -64,6 +64,7 @@ const skipButton = ({ ...props }) => (
 export default function Index() {
   const [showOnboarding, setShowOnboarding] = useState(false);
   const onboardingRef = useRef<Onboarding>(null);
+  const router = useRouter(); 
   if (!showOnboarding) {
     return (
       <TouchableWithoutFeedback onPress={() => setShowOnboarding(true)}>
@@ -93,7 +94,7 @@ export default function Index() {
       titleStyles={{ fontWeight: "600", fontSize: 40, marginBottom: 20 }}
       subTitleStyles={{ fontWeight: "300", fontSize: 20 }}
       ref={onboardingRef}
-      onSkip={() => <Redirect href={'/(tabs)'}/>}
+      onSkip={() => router.replace("/(tabs)/explore")}
       pages={[
         {
           backgroundColor: "#fff",
