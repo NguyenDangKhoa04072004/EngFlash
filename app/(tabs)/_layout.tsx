@@ -1,43 +1,94 @@
 import { Tabs } from 'expo-router';
-import React from 'react';
-import { Platform } from 'react-native';
+import { View, Image } from 'react-native';
 
-import { HapticTab } from '@/components/HapticTab';
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import TabBarBackground from '@/components/ui/TabBarBackground';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
-
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
+export default function TabsLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
-        tabBarStyle: Platform.select({
-          ios: {
-            // Use a transparent background on iOS to show the blur effect
-            position: 'absolute',
-          },
-          default: {},
-        }),
-      }}>
+        tabBarStyle: {
+          backgroundColor: '#A01850',
+          borderTopRightRadius: 25,
+          borderTopLeftRadius: 25,
+          position: 'absolute', // cần để tạo hiệu ứng bo cong
+          overflow: 'hidden',   // rất quan trọng để bo góc có hiệu lực
+        },
+        tabBarActiveTintColor: '#FDFDFD',
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          title: 'Học tập',
+          tabBarIcon: ({ focused }) => (
+            <Image
+              source={
+                focused
+                  ? require('../../assets/images/navigation/hoctap1.png')
+                  : require('../../assets/images/navigation/hoctap.png')
+              }
+            />
+          ),
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="productivity"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: 'Năng suất',
+          tabBarIcon: ({ focused }) => (
+            <Image
+              source={
+                focused
+                  ? require('../../assets/images/navigation/nangsuat1.png')
+                  : require('../../assets/images/navigation/nangsuat.png')
+              }
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="addcard"
+        options={{
+          title: 'Tạo thẻ',
+          tabBarIcon: ({ focused }) => (
+            <Image
+              source={
+                focused
+                  ? require('../../assets/images/navigation/taothe1.png')
+                  : require('../../assets/images/navigation/taothe.png')
+              }
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="notification"
+        options={{
+          title: 'Thông báo',
+          tabBarIcon: ({ focused }) => (
+            <Image
+              source={
+                focused
+                  ? require('../../assets/images/navigation/thongbao1.png')
+                  : require('../../assets/images/navigation/thongbao.png')
+              }
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="other"
+        options={{
+          title: 'Khác',
+          tabBarIcon: ({ focused }) => (
+            <Image
+              source={
+                focused
+                  ? require('../../assets/images/navigation/khac1.png')
+                  : require('../../assets/images/navigation/khac.png')
+              }
+            />
+          ),
         }}
       />
     </Tabs>

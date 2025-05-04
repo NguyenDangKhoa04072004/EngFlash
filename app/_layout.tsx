@@ -14,7 +14,14 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+    // SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+    Regular: require('../assets/fonts/BeVietnamPro-Regular.ttf'),
+    Medium: require('../assets/fonts/BeVietnamPro-Medium.ttf'),
+    Bold: require('../assets/fonts/BeVietnamPro-Bold.ttf'),
+    Light: require('../assets/fonts/BeVietnamPro-Light.ttf'),
+    Thin: require('../assets/fonts/BeVietnamPro-Thin.ttf'),
+    Italic: require('../assets/fonts/BeVietnamPro-Italic.ttf'),
+    Semibold: require('../assets/fonts/BeVietnamPro-SemiBold.ttf'),
   });
 
   useEffect(() => {
@@ -30,8 +37,9 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
-        <Stack.Screen name="index" options={{headerShown: false, navigationBarHidden: true}} />
+        <Stack.Screen name="index" options={{ headerShown: false, navigationBarHidden: true }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style="auto" />
