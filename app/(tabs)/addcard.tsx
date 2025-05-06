@@ -123,6 +123,9 @@ const AddCard = () => {
           // Android shadow
           elevation: 4,
         }}
+        onPress={() => {
+          router.replace("/(create_card)/create-card-video");
+        }}
       >
         <Text
           style={{
