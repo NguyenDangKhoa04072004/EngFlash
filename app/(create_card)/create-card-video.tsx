@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 import LoadingScreen from "@/components/LoadingScreen";
+import { Keyboard } from "react-native";
 
 import SuccessModal from "@/components/SuccessModel";
 
@@ -54,6 +55,7 @@ const CreateCardVideo = () => {
                         paddingHorizontal: 10,
                     }}
                     onPress={() => {
+                        Keyboard.dismiss();
                         handlePress();
                     }}
                 >
