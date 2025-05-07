@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { WebView } from "react-native-webview";
 import {
     View,
     Text,
@@ -14,19 +15,19 @@ import SuccessModal from "@/components/SuccessModel";
 
 const CreateCardVideo = () => {
     const router = useRouter();
-    const [secureText1, setSecureText1] = useState(true);
-    const [secureText2, setSecureText2] = useState(true);
-
-    const [showModal, setShowModal] = useState(false);
     const [showLoading, setShowLoading] = useState(false);
+    const [showResult, setshowResult] = useState(false);
+    const [videoUrl, setVideoUrl] = useState("");
+
     const handlePress = () => {
         setShowLoading(true);
+        setshowResult(false);
 
         setTimeout(() => {
             setShowLoading(false);
+            setshowResult(true);
         }, 3000);
     };
-
 
     return (
         <View style={styles.container}>
@@ -36,6 +37,8 @@ const CreateCardVideo = () => {
                     style={styles.input}
                     placeholder="Nhập liên kết của video youtube..."
                     placeholderTextColor="#101828"
+                    value={videoUrl}
+                    onChangeText={(text) => setVideoUrl(text)}
                 />
 
                 <TouchableOpacity
@@ -50,7 +53,9 @@ const CreateCardVideo = () => {
                         height: 45,
                         paddingHorizontal: 10,
                     }}
-                    onPress={() => { handlePress() }}
+                    onPress={() => {
+                        handlePress();
+                    }}
                 >
                     <Text
                         style={{
@@ -67,9 +72,41 @@ const CreateCardVideo = () => {
                     />
                 </TouchableOpacity>
             </View>
-            {showLoading && (<View style={{
-                marginTop: 250
-            }}><LoadingScreen hiddenText={true} /></View>)}
+
+            {showLoading && (
+                <View
+                    style={{
+                        marginTop: 250,
+                    }}
+                >
+                    <LoadingScreen hiddenText={true} />
+                </View>
+            )}
+
+            {showResult && (
+                <>
+                    <View style={styles.container_webview}>
+                        <WebView
+                            style={styles.webview}
+                            javaScriptEnabled={true}
+                            domStorageEnabled={true}
+                            source={{ uri: videoUrl }}
+                        />
+                    </View>
+                    <TouchableOpacity
+                        style={{
+                            position: "absolute",
+                            bottom: 20,
+                            right: 20,
+                        }}
+                        onPress={() => {
+                            router.replace("/(create_card)/create-collection");
+                        }}
+                    >
+                        <Image source={require("@/assets/images/create_card/plus.png")} />
+                    </TouchableOpacity>
+                </>
+            )}
         </View>
     );
 };
@@ -105,6 +142,14 @@ const styles = StyleSheet.create({
         fontSize: 12,
         fontFamily: "Regular",
         color: "#101828",
+    },
+    container_webview: {
+        height: 200,
+        width: "100%",
+        overflow: "hidden",
+    },
+    webview: {
+        flex: 1,
     },
 });
 
