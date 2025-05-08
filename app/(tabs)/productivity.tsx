@@ -1,18 +1,17 @@
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, Dimensions } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 //Import thư viện biểu đồ
-import { BarChart } from "react-native-chart-kit";
+import { BarChart, LineChart } from "react-native-gifted-charts";
 
 
 // Khai báo dữ liệu
-const data = {
-  labels: ["Week 1", "Week 2", "Week 3"],
-  datasets: [
-    {
-      data: [50, 40, 60] // Dữ liệu từ hình ảnh của bạn
-    }
-  ]
-};
+const data = [
+  { value: 45, label: "Week 1", frontColor: "#FFD601" },
+  { value: 39, label: "Week 2", frontColor: "#FFD601" },
+  { value: 61, label: "Week 3", frontColor: "#FFD601" },
+];
+
+const screenWidth = Dimensions.get("window").width; //Lấy chiều dài màn hình
 
 
 export default function Productivity() {
@@ -49,21 +48,16 @@ export default function Productivity() {
       {/* Sơ đồ 1 */}
       <View style={styles.chartContainer}>
         <BarChart
+          width={220}
+          height={170}
+          xAxisThickness={1}
+          xAxisLabelTextStyle={{ fontSize: 14, width: 50, textAlign: 'center' }}
+          rotateLabel
+          barWidth={12}
+          spacing={60}
+          noOfSections={3}
+          barBorderRadius={10}
           data={data}
-          width={350} // Điều chỉnh kích thước phù hợp
-          height={200}
-          yAxisLabel=""
-          yAxisSuffix=""
-          chartConfig={{
-            backgroundColor: "#fff",
-            backgroundGradientFrom: "#fff",
-            backgroundGradientTo: "#fff",
-            decimalPlaces: 0,
-            color: (opacity = 1) => `rgba(255, 204, 0, ${opacity})`, // Màu vàng cho cột
-            labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-            barPercentage: 0.5
-          }}
-          style={{ marginVertical: 8 }}
         />
       </View>
 
@@ -120,6 +114,10 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 250,
     marginBottom: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingBottom: 10,
+    overflow: 'hidden'
   },
   cellContainer: {
     flexDirection: "row",
