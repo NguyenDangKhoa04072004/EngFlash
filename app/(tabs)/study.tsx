@@ -1,49 +1,16 @@
+import DraggableView from "@/components/StudyTab/DraggableView";
+import { TouchableOpacity } from "react-native";
 import { StyleSheet, Text, View } from "react-native";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { navigate } from "expo-router/build/global-state/routing";
-import FlashCard from "@/components/StudyTab/FlashCard";
-import { Button } from "react-native-elements/dist/buttons/Button";
+import { Button } from "react-native-elements";
+
 export default function StudyScreen() {
   return (
     <View style={styles.container}>
-      <MaterialIcons
-        onPress={() => navigate("/(tabs)")}
-        name="navigate-before"
-        size={40}
-        color="#2A2A2A"
-        style={styles.returnButton}
-      />
-      <View style={styles.title}>
-        <Text
-          style={{
-            fontSize: 30,
-            fontWeight: 400,
-            textAlign: "center",
-          }}
-        >
-          Clothes - Học tập
-        </Text>
+      <View style={styles.heading}>
+        <Text style={styles.header}>Clothes - Học tập</Text>
       </View>
-
-      <View style={styles.cardWrapper}></View>
-      <Button
-        title={"+"}
-        buttonStyle={{
-          backgroundColor: "#DB2777",
-          borderRadius: "50%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-        containerStyle={{
-          position: "relative",
-          bottom: -420,
-          left: 330,
-          width: 40,
-          height: 50,
-          borderRadius:'50%'
-        }}
-      />
+      <DraggableView />
+      <Button title={"+"} buttonStyle={styles.addBtn} containerStyle={styles.btnCotainer}/>
     </View>
   );
 }
@@ -51,24 +18,35 @@ export default function StudyScreen() {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#FEE2E2",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
     flex: 1,
   },
-  title: {
-    position: "relative",
-    top: 30,
-    width: "100%",
+  heading: {
+    padding: 20,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   },
-  returnButton: {
-    position: "relative",
-    top: 68,
-    left: 20,
+  header: {
+    fontSize: 25,
   },
-  cardWrapper: {
-    position: "relative",
-    width: "80%",
-    height: 300,
-    top: "30%",
-    left: "50%",
-    transform: [{ translateX: "-50%" }],
+  footer:{
+    padding:20,
+    display:'flex',
+    justifyContent:'center',
+    alignItems:'flex-end'
   },
+  btnCotainer:{
+    position:'relative',
+    top:30,
+    left:150
+  },
+  addBtn:{
+    borderRadius:'50%',
+    backgroundColor:'#DB2777',
+    width:40,
+    height:40,
+  }
 });
