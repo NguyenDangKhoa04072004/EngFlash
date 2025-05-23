@@ -107,6 +107,51 @@ const CreateCardVideo = () => {
                     >
                         <Image source={require("@/assets/images/create_card/plus.png")} />
                     </TouchableOpacity>
+                    <View style={{ marginTop: 40 }}>
+                        <View style={styles.word}>
+                            <Image
+                                source={require("@/assets/images/create_card/volume.png")}
+                            />
+                            <Text
+                                style={{ fontFamily: "Regular", fontSize: 20, marginLeft: 20 }}
+                            >
+                                <Text style={{ color: "#15803D" }}>to </Text>chill out
+                            </Text>
+                        </View>
+                        <View style={styles.word}>
+                            <Image
+                                source={require("@/assets/images/create_card/volume.png")}
+                            />
+                            <Text
+                                style={{ fontFamily: "Regular", fontSize: 20, marginLeft: 20 }}
+                            >
+                                <Text style={{ color: "#15803D" }}>to </Text>chill out
+                            </Text>
+                        </View>
+                        <View style={styles.word}>
+                            <Image
+                                source={require("@/assets/images/create_card/volume.png")}
+                            />
+                            <Text
+                                style={{ fontFamily: "Regular", fontSize: 20, marginLeft: 20 }}
+                            >
+                                <Text style={{ color: "#15803D" }}>to </Text>chill out
+                            </Text>
+                        </View>
+                        <View style={styles.word}>
+                            <Image
+                                source={require("@/assets/images/create_card/volume.png")}
+                            />
+                            <Text
+                                style={{ fontFamily: "Regular", fontSize: 20, marginLeft: 20 }}
+                            >
+                                join a{" "}
+                                <Text style={{ color: "#DC2626", fontFamily: "Bold" }}>
+                                    conversation
+                                </Text>
+                            </Text>
+                        </View>
+                    </View>
                 </>
             )}
         </View>
@@ -152,6 +197,11 @@ const styles = StyleSheet.create({
     },
     webview: {
         flex: 1,
+    },
+    word: {
+        flexDirection: "row",
+        marginBottom: 20,
+        alignItems: "center",
     },
 });
 

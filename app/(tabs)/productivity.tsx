@@ -31,24 +31,17 @@ const dataBarchart2 = [
 
 const dataPiechart = [
   {
-    value: 20,
-    color: '#87CEEB', // Light Sky Blue (cho "Đang ôn")
-    label: '20%\nĐang ôn',
-    labelStyle: { color: 'blue', fontSize: 12, textAlign: 'center' },
-    labelLineColor: 'blue',
-    labelLineStrokeDashArray: [4, 2], // Để tạo đường nối chấm chấm
-  },
-  {
     value: 35,
-    color: '#FF69B4', // Hot Pink (cho "Đã học")
+    color: '#F472B6', // Hot Pink (cho "Đã học")
     label: '35%\nĐã học',
     labelStyle: { color: 'deeppink', fontSize: 12, textAlign: 'center' },
     labelLineColor: 'deeppink',
     labelLineStrokeDashArray: [4, 2],
+    text: '35%\nĐã học'
   },
   {
     value: 10,
-    color: '#FA8072', // Salmon (cho "Đã ôn")
+    color: '#F87171', // Salmon (cho "Đã ôn")
     label: '10%\nĐã ôn',
     labelStyle: { color: 'red', fontSize: 12, textAlign: 'center' },
     labelLineColor: 'red',
@@ -56,20 +49,28 @@ const dataPiechart = [
   },
   {
     value: 35,
-    color: '#D3D3D3', // Light Grey (cho "Đang học")
+    color: '#D4D4D4', // Light Grey (cho "Đang học")
     label: '35%\nĐang học',
     labelStyle: { color: 'black', fontSize: 12, textAlign: 'center' },
     labelLineColor: 'grey',
     labelLineStrokeDashArray: [4, 2],
   },
+  {
+    value: 20,
+    color: '#93C5FD', // Light Sky Blue (cho "Đang ôn")
+    label: '20%\nĐang ôn',
+    labelStyle: { color: 'blue', fontSize: 12, textAlign: 'center' },
+    labelLineColor: 'blue',
+    labelLineStrokeDashArray: [4, 2], // Để tạo đường nối chấm chấm
+  },
 ];
 
 const centerLabelComponent = () => {
   return (
-    <View style={styles.centerLabelContainer}>
-      <Text style={styles.centerLabelTextLine1}>Tổng Số</Text>
-      <Text style={styles.centerLabelTextLine1}>Bộ Từ</Text>
-      <Text style={styles.centerLabelTextLine2}>20/20</Text>
+    <View style={{ justifyContent: "center", alignItems: "center" }}>
+      <Text style={{}}>Tổng Số</Text>
+      <Text style={{ marginBottom: 10 }}>Bộ Từ</Text>
+      <Text style={{}}>20/20</Text>
     </View>
   );
 };
@@ -158,20 +159,13 @@ export default function Productivity() {
         <PieChart
           data={dataPiechart}
           donut
-          radius={110} // Điều chỉnh bán kính ngoài của biểu đồ
-          innerRadius={70} // Điều chỉnh bán kính trong để tạo độ dày cho donut
+          radius={110}
+          innerRadius={70}
           centerLabelComponent={centerLabelComponent}
-          labelsPosition="outward" // Đặt nhãn bên ngoài các phần
-          // labelRadius={130} // Tùy chọn: Khoảng cách của văn bản nhãn từ tâm.
-          // Nếu lớn hơn 'radius', nhãn sẽ ở xa hơn.
-          labelWidth={80}   // Chiều rộng của vùng chứa nhãn
-          // labelTextLines={2} // Số dòng cho văn bản nhãn, '\n' thường tự xử lý
-          strokeColor="white" // Màu của đường phân cách giữa các phần
-          strokeWidth={4}     // Độ dày của đường phân cách
-        // startAngle={-90} // Tùy chọn: Góc bắt đầu cho phần đầu tiên (ví dụ: -90 để bắt đầu từ đỉnh)
-        // Điều chỉnh giá trị này để xoay biểu đồ cho khớp với hình ảnh
-        // Optional styling for all labels, can be overridden by item's labelStyle
-        // labelTextStyle={{fontSize: 12}}
+          labelsPosition="outward"
+          strokeColor="white"
+          strokeWidth={4}
+          showTextBackground
         />
       </View>
       <Text style={styles.label}>Thống kê theo bộ từ</Text>
