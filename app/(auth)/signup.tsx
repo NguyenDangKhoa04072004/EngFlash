@@ -8,16 +8,75 @@ import {
     Image,
 } from "react-native";
 import { useRouter } from "expo-router";
-
 import SuccessModal from "@/components/SuccessModel";
+import LoadingScreen from "@/components/LoadingScreen";
 
 const LoginScreen = () => {
     const router = useRouter();
     const [secureText1, setSecureText1] = useState(true);
     const [secureText2, setSecureText2] = useState(true);
+    const [modalFailVisible, setModalFailVisible] = useState(false);
+    const [modalSuccessVisible, setModalSuccessVisible] = useState(false);
+    const [message, setMessage] = useState("")
+    const [loading, setLoading] = useState(false)
 
-    const [modalVisible, setModalVisible] = useState(false);
+    const [name, setName] = useState("");
+    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [repassword, setRepassword] = useState("");
 
+
+    const handleSignUp = async () => {
+
+        if (!email.trim() || !password.trim() || !name.trim() || !username.trim()) {
+            setMessage("Vui lòng điền hết các trường.")
+            setModalFailVisible(true)
+            return
+        }
+        if (password != repassword) {
+            setMessage("Mật khẩu không khớp")
+            setModalFailVisible(true)
+            return
+        }
+        setLoading(true);
+        try {
+            const response = await fetch("https://engflash-system.onrender.com/auth/signup", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    name,
+                    email,
+                    password
+                })
+            });
+            if (!response.ok) {
+                setLoading(false)
+                setMessage("Email đã tồn tại. Vui lòng sử\ndụng email khác.");
+                setModalFailVisible(true)
+            }
+            else {
+                setLoading(false);
+                setMessage("Hãy đăng nhập và bắt đầu trải\nnghiệm dịch vụ của chúng tôi")
+                setModalSuccessVisible(true)
+            }
+
+        }
+        catch (error) {
+            setLoading(false);
+            setMessage("Lỗi hệ thông, vui lòng thử lại sau.");
+            setModalFailVisible(true)
+        }
+        // setMessage("Email đã tồn tại. Vui lòng sử\ndụng email khác.");
+        // setMessage("Hãy đăng nhập và bắt đầu trải\nnghiệm dịch vụ của chúng tôi");
+    }
+
+
+    if (loading) {
+        return <LoadingScreen />
+    }
     return (
         <View style={styles.container}>
             <Text style={styles.title0}>Hãy bắt đầu nào!</Text>
@@ -34,6 +93,8 @@ const LoginScreen = () => {
                     style={styles.input}
                     placeholder="Họ và tên"
                     placeholderTextColor="#404040"
+                    value={name}
+                    onChangeText={setName}
                 />
             </View>
             <View style={styles.inputContainer}>
@@ -45,6 +106,8 @@ const LoginScreen = () => {
                     style={styles.input}
                     placeholder="Tên tài khoản"
                     placeholderTextColor="#404040"
+                    value={username}
+                    onChangeText={setUsername}
                 />
             </View>
             <View style={styles.inputContainer}>
@@ -56,6 +119,8 @@ const LoginScreen = () => {
                     style={styles.input}
                     placeholder="Email"
                     placeholderTextColor="#404040"
+                    value={email}
+                    onChangeText={setEmail}
                 />
             </View>
 
@@ -71,6 +136,8 @@ const LoginScreen = () => {
                     placeholder="Mật khẩu"
                     secureTextEntry={secureText1}
                     placeholderTextColor="#404040"
+                    value={password}
+                    onChangeText={setPassword}
                 />
                 <TouchableOpacity
                     style={styles.hiddenIcon}
@@ -95,6 +162,8 @@ const LoginScreen = () => {
                     placeholder="Xác nhận mật khẩu"
                     secureTextEntry={secureText2}
                     placeholderTextColor="#404040"
+                    value={repassword}
+                    onChangeText={setRepassword}
                 />
                 <TouchableOpacity
                     style={styles.hiddenIcon}
@@ -112,18 +181,18 @@ const LoginScreen = () => {
 
             <TouchableOpacity
                 style={styles.button}
-                onPress={() => setModalVisible(true)}
+                onPress={() => handleSignUp()}
             >
                 <Text style={styles.buttonText}>Tạo tài khoản</Text>
             </TouchableOpacity>
 
-            {/* Modal Alert */}
 
-            <SuccessModal visible={modalVisible} onClose={() => setModalVisible(false)} type={"fail"} title={"Đăng ký thất bại!"}
-                message={"Email đã tồn tại. Vui lòng sử\ndụng email khác.."} />
 
-            {/* <SuccessModal visible={modalVisible} onClose={() => setModalVisible(false)} type={"success"} title={"Đăng ký thành công!"}
-                message={"Hãy đăng nhập và bắt đầu trải\nnghiệm dịch vụ của chúng tôi"} /> */}
+            <SuccessModal visible={modalFailVisible} onClose={() => setModalFailVisible(false)} type={"fail"} title={"Đăng ký thất bại!"}
+                message={message} />
+
+            <SuccessModal visible={modalSuccessVisible} onClose={() => router.replace("/(auth)/login")} type={"success"} title={"Đăng ký thành công!"}
+                message={message} />
 
             <View style={styles.footer}>
                 <Text>Đã có tài khoản? </Text>
