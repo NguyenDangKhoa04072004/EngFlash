@@ -1,5 +1,6 @@
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { useNavigation, useRouter } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const settings = [
   { icon: require('../../assets/images/other screen/account.png'), label: 'Tài khoản' },
@@ -42,7 +43,7 @@ export default function OtherScreen() {
         })}
 
         {/* Đăng xuất */}
-        <TouchableOpacity style={styles.logout} onPress={() => { router.replace('/(auth)/login') }}>
+        <TouchableOpacity style={styles.logout} onPress={async () => { await AsyncStorage.removeItem('accessToken'); router.replace('/(auth)/login') }}>
           <Image source={require('../../assets/images/other screen/logout.png')} style={styles.logoutIcon} />
           <Text style={styles.logoutText}>Đăng xuất</Text>
         </TouchableOpacity>

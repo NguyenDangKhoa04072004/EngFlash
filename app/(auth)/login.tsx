@@ -1,4 +1,3 @@
-import { replace } from "expo-router/build/global-state/routing";
 import React, { useState } from "react";
 import {
     View,
@@ -10,12 +9,52 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 import SuccessModal from "@/components/SuccessModel";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import LoadingScreen from "@/components/LoadingScreen";
 
 
 const LoginScreen = () => {
     const router = useRouter();
     const [modalVisible, setModalVisible] = useState(false);
+    const [redWarning, setWarning] = useState(false)
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [loading, setLoading] = useState(false)
 
+    const handleLogin = async () => {
+        setLoading(true);
+        try {
+            const response = await fetch("https://engflash-system.onrender.com/auth/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    email,
+                    password
+                })
+            });
+
+            if (!response.ok) {
+                setLoading(false)
+                setWarning(true);
+                setModalVisible(true);
+            }
+            else {
+                const data = await response.json();
+                await AsyncStorage.setItem('accessToken', data.access_token);
+                setLoading(false);
+                router.replace("/(tabs)")
+            }
+        } catch (error) {
+            setLoading(false);
+            setModalVisible(true);
+        }
+    };
+
+    if (loading) {
+        return <LoadingScreen />
+    }
     return (
         <View style={styles.container}>
             <Image
@@ -34,9 +73,14 @@ const LoginScreen = () => {
                     style={styles.inputIcon}
                 ></Image>
                 <TextInput
-                    style={styles.input}
+                    style={[styles.input, redWarning && styles.inputError]}
                     placeholder="Tên tài khoản"
                     placeholderTextColor="#404040"
+                    value={email}
+                    onChangeText={(text) => {
+                        setEmail(text);
+                        setWarning(false);
+                    }}
                 />
             </View>
             <View style={styles.inputContainer}>
@@ -45,10 +89,15 @@ const LoginScreen = () => {
                     style={styles.inputIcon}
                 ></Image>
                 <TextInput
-                    style={styles.input}
+                    style={[styles.input, redWarning && styles.inputError]}
                     placeholder="Mật khẩu"
                     secureTextEntry={true}
                     placeholderTextColor="#404040"
+                    value={password}
+                    onChangeText={(text) => {
+                        setPassword(text);
+                        setWarning(false);
+                    }}
                 />
             </View>
 
@@ -60,14 +109,14 @@ const LoginScreen = () => {
 
             <TouchableOpacity
                 style={styles.button}
-                onPress={() => setModalVisible(true)}
+                onPress={() => handleLogin()}
             >
                 <Text style={styles.buttonText}>Đăng nhập</Text>
             </TouchableOpacity>
 
             <SuccessModal
                 visible={modalVisible}
-                onClose={() => router.replace("/(tabs)/other")}
+                onClose={() => setModalVisible(false)}
                 type={"fail"}
                 title={"Đăng nhập thất bại!"}
                 message={"Tên đăng nhập hoặc mật khẩu\nkhông đúng. Vui lòng thử lại."}
@@ -82,6 +131,8 @@ const LoginScreen = () => {
         </View>
     );
 };
+
+
 
 const styles = StyleSheet.create({
     container: {
@@ -129,6 +180,10 @@ const styles = StyleSheet.create({
         marginBottom: 15,
         fontSize: 16,
     },
+    inputError: {
+        color: "#7F1D1D",
+    }
+    ,
     forgotPassword: {
         color: "#404040",
         textAlign: "right",
