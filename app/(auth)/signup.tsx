@@ -4,12 +4,14 @@ import { useRouter } from 'expo-router';
 
 import SuccessModal from '@/components/SuccessModel';
 
+
+
 const LoginScreen = () => {
     const router = useRouter();
     const [secureText1, setSecureText1] = useState(true);
     const [secureText2, setSecureText2] = useState(true);
 
-    const [showModal, setShowModal] = useState(false);
+    const [modalVisible, setModalVisible] = useState(false);
 
     return (
         <View style={styles.container}>
@@ -82,11 +84,11 @@ const LoginScreen = () => {
             </View>
 
 
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity style={styles.button} onPress={() => setModalVisible(true)}>
                 <Text style={styles.buttonText}>Tạo tài khoản</Text>
             </TouchableOpacity>
 
-            <SuccessModal visible={showModal} onClose={() => setShowModal(false)} />
+            <SuccessModal visible={modalVisible} onClose={() => setModalVisible(false)} />
 
             <View style={styles.footer}>
                 <Text>Đã có tài khoản?{' '}</Text>

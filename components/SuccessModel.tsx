@@ -1,7 +1,7 @@
 import React from "react";
-import { Modal, View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { Modal, View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 
-export default function SuccessModal({ visible, onClose }) {
+export default function SuccessModal({ visible, onClose, title, description }) {
     return (
         <Modal
             transparent
@@ -11,10 +11,26 @@ export default function SuccessModal({ visible, onClose }) {
         >
             <View style={styles.overlay}>
                 <View style={styles.box}>
-                    <Text style={styles.text}>Đăng nhập thành công!</Text>
                     <TouchableOpacity onPress={onClose} style={styles.button}>
-                        <Text style={styles.buttonText}>Hủy</Text>
+                        <Image
+                            source={require("@/assets/images/modal/exit.png")}
+                        />
                     </TouchableOpacity>
+                    <View style={{ width: "100%", flexDirection: "row", justifyContent: "space-around", paddingHorizontal: 10 }}>
+                        <View style={{ borderRadius: 8, width: 56, height: 56, backgroundColor: "#65A30D" }}>
+                            <Image
+                                source={require("@/assets/images/modal/fail.png")}
+                            />
+                        </View>
+                        <View style={{ flexDirection: "column", paddingRight: 20 }}>
+                            <Text style={{ fontFamily: 'Semibold', fontSize: 20, marginBottom: 10 }}>
+                                Đăng nhập thất bại
+                            </Text >
+                            <Text style={{ fontFamily: 'Regular', fontSize: 14, lineHeight: 22, color: "#54595E", opacity: "0.6", marginBottom: 20 }}>
+                                Tên đăng nhập hoặc mật khẩu{'\n'}không đúng. Vui lòng thử lại.
+                            </Text>
+                        </View>
+                    </View>
                 </View>
             </View>
         </Modal>
@@ -24,23 +40,21 @@ export default function SuccessModal({ visible, onClose }) {
 const styles = StyleSheet.create({
     overlay: {
         flex: 1,
-        backgroundColor: "rgba(0,0,0,0.3)",
+        backgroundColor: "rgba(0,0,0,0.1)",
         justifyContent: "center",
         alignItems: "center",
     },
     box: {
         backgroundColor: "#fff",
-        padding: 20,
+        padding: 10,
         borderRadius: 8,
         alignItems: "center",
-        width: 260,
+        width: 353,
     },
-    text: { fontSize: 16, marginBottom: 20, textAlign: "center" },
     button: {
-        paddingVertical: 10,
-        paddingHorizontal: 30,
-        backgroundColor: "#E5E5E5",
-        borderRadius: 5,
-    },
-    buttonText: { fontSize: 16, color: "#333" },
+        width: "100%",
+        flexDirection: "row",
+        justifyContent: "flex-end"
+    }
+
 });
