@@ -88,6 +88,7 @@ const CreateCollection = () => {
                     height: 40,
                     marginBottom: 15,
                 }}
+                onPress={() => setShowModal(true)}
             >
                 <Text
                     style={{
@@ -100,6 +101,7 @@ const CreateCollection = () => {
                     Lưu
                 </Text>
             </TouchableOpacity>
+            <SuccessModal visible={showModal} onClose={() => setShowModal(false)} type={"success"} title={"Tạo collection thành công!"} message={""} />
         </ScrollView>
     );
 };

@@ -1,7 +1,7 @@
 import React from "react";
 import { Modal, View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 
-export default function SuccessModal({ visible, onClose, title, description }) {
+export default function SuccessModal({ visible, onClose, type, title, message }) {
     return (
         <Modal
             transparent
@@ -16,20 +16,26 @@ export default function SuccessModal({ visible, onClose, title, description }) {
                             source={require("@/assets/images/modal/exit.png")}
                         />
                     </TouchableOpacity>
-                    <View style={{ width: "100%", flexDirection: "row", justifyContent: "space-around", paddingHorizontal: 10 }}>
-                        <View style={{ borderRadius: 8, width: 56, height: 56, backgroundColor: "#65A30D" }}>
+                    <View style={{ width: "100%", flexDirection: "row", justifyContent: "space-around", paddingHorizontal: 10, paddingBottom: message === "" ? 30 : null }}>
+                        <View style={{ borderRadius: 8, width: 56, height: 56, backgroundColor: type === "success" ? "#EC4899" : "#65A30D" }}>
                             <Image
-                                source={require("@/assets/images/modal/fail.png")}
+                                source={type === "success" ? require("@/assets/images/modal/success.png") : require("@/assets/images/modal/fail.png")}
                             />
                         </View>
-                        <View style={{ flexDirection: "column", paddingRight: 20 }}>
-                            <Text style={{ fontFamily: 'Semibold', fontSize: 20, marginBottom: 10 }}>
-                                Đăng nhập thất bại
+                        {message === "" ?
+                            <Text style={{ fontFamily: 'Semibold', fontSize: 20, marginBottom: 10, alignSelf: "center", paddingTop: 10, marginLeft: 5 }}>
+                                {title}
                             </Text >
-                            <Text style={{ fontFamily: 'Regular', fontSize: 14, lineHeight: 22, color: "#54595E", opacity: "0.6", marginBottom: 20 }}>
-                                Tên đăng nhập hoặc mật khẩu{'\n'}không đúng. Vui lòng thử lại.
-                            </Text>
-                        </View>
+
+                            :
+                            <View style={{ flexDirection: "column", paddingRight: 20 }}>
+                                <Text style={{ fontFamily: 'Semibold', fontSize: 20, marginBottom: 10 }}>
+                                    {title}
+                                </Text >
+                                <Text style={{ fontFamily: 'Regular', fontSize: 14, lineHeight: 22, color: "#54595E", opacity: "0.6", marginBottom: 20 }}>
+                                    {message}
+                                </Text>
+                            </View>}
                     </View>
                 </View>
             </View>

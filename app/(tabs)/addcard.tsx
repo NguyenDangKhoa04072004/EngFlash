@@ -90,6 +90,7 @@ const AddCard = () => {
           height: 40,
           marginBottom: 15,
         }}
+        onPress={() => setShowModal(true)}
       >
         <Text
           style={{
@@ -102,6 +103,9 @@ const AddCard = () => {
           Lưu
         </Text>
       </TouchableOpacity>
+
+      {/* Modal Alert */}
+      <SuccessModal visible={showModal} onClose={() => setShowModal(false)} type={"success"} title={"Tạo thẻ thành công!"} message={""} />
 
       <TouchableOpacity
         style={{

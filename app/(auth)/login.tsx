@@ -1,5 +1,5 @@
 import { replace } from "expo-router/build/global-state/routing";
-import React from "react";
+import React, { useState } from "react";
 import {
     View,
     Text,
@@ -9,9 +9,12 @@ import {
     Image,
 } from "react-native";
 import { useRouter } from "expo-router";
+import SuccessModal from "@/components/SuccessModel";
+
 
 const LoginScreen = () => {
     const router = useRouter();
+    const [modalVisible, setModalVisible] = useState(false);
 
     return (
         <View style={styles.container}>
@@ -57,10 +60,18 @@ const LoginScreen = () => {
 
             <TouchableOpacity
                 style={styles.button}
-                onPress={() => router.replace("/(tabs)/other")}
+                onPress={() => setModalVisible(true)}
             >
                 <Text style={styles.buttonText}>Đăng nhập</Text>
             </TouchableOpacity>
+
+            <SuccessModal
+                visible={modalVisible}
+                onClose={() => router.replace("/(tabs)/other")}
+                type={"fail"}
+                title={"Đăng nhập thất bại!"}
+                message={"Tên đăng nhập hoặc mật khẩu\nkhông đúng. Vui lòng thử lại."}
+            />
 
             <View style={styles.footer}>
                 <Text>Chưa có tài khoản? </Text>
