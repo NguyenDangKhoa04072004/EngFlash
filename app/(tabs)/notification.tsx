@@ -19,42 +19,7 @@ const notifications = [
     message: 'Có cập nhật mới, học ngay!',
     active: true
   },
-  {
-    id: 4,
-    title: '50 TỪ VỰNG VỀ IELTS',
-    message: 'Có cập nhật mới, học ngay!',
-    active: true
-  },
-  {
-    id: 5,
-    title: '50 TỪ VỰNG VỀ IELTS',
-    message: 'Có cập nhật mới, học ngay!',
-    active: true
-  },
-  {
-    id: 6,
-    title: '50 TỪ VỰNG VỀ IELTS',
-    message: 'Có cập nhật mới, học ngay!',
-    active: true
-  },
-  {
-    id: 7,
-    title: '50 TỪ VỰNG VỀ IELTS',
-    message: 'Có cập nhật mới, học ngay!',
-    active: true
-  },
-  {
-    id: 8,
-    title: '50 TỪ VỰNG VỀ IELTS',
-    message: 'Có cập nhật mới, học ngay!',
-    active: true
-  },
-  {
-    id: 9,
-    title: '50 TỪ VỰNG VỀ IELTS',
-    message: 'Có cập nhật mới, học ngay!',
-    active: true
-  }
+
 ];
 
 export default function NotificationScreen() {
