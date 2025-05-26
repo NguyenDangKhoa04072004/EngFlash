@@ -16,7 +16,6 @@ const LoginScreen = () => {
     const handleSubmit = async () => {
         setLoading(true)
         const user_id = Number(await AsyncStorage.getItem("resetId"));
-        await AsyncStorage.removeItem("user_id")
         if (newPassword != rePassword || !newPassword.trim()) {
             setLoading(false)
             setModalVisible(true)
@@ -35,6 +34,7 @@ const LoginScreen = () => {
             });
 
             if (response.ok) {
+                await AsyncStorage.removeItem("resetId")
                 setLoading(false)
                 router.replace('/(auth)/login');
             }
