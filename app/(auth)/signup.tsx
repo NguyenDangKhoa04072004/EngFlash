@@ -41,7 +41,7 @@ const LoginScreen = () => {
         }
         setLoading(true);
         try {
-            const response = await fetch("https://engflash-system.onrender.com/auth/signup", {
+            const response = await fetch("https://engflash-system-ngk.onrender.com/auth/signup", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

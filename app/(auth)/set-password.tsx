@@ -2,22 +2,56 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { useRouter } from 'expo-router';
 import LoadingScreen from '../../components/LoadingScreen';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import SuccessModal from '@/components/SuccessModel';
 
 const LoginScreen = () => {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
+    const [newPassword, setNewPassword] = useState("")
+    const [rePassword, setRePassword] = useState("")
+    const [modalVisible, setModalVisible] = useState(false);
+
+
+    const handleSubmit = async () => {
+        setLoading(true)
+        const user_id = Number(await AsyncStorage.getItem("resetId"));
+        await AsyncStorage.removeItem("user_id")
+        if (newPassword != rePassword || !newPassword.trim()) {
+            setLoading(false)
+            setModalVisible(true)
+            return
+        }
+        try {
+            const response = await fetch("https://engflash-system-ngk.onrender.com/auth/reset-password", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    user_id,
+                    newPassword
+                })
+            });
+
+            if (response.ok) {
+                setLoading(false)
+                router.replace('/(auth)/login');
+            }
+            else {
+                setLoading(false)
+                console.log("lôi")
+                setModalVisible(true)
+            }
+        } catch (error) {
+            setLoading(false)
+        }
+    };
+
+
     if (loading) {
         return <LoadingScreen />;
     }
-
-    const handleSubmit = () => {
-        setLoading(true);
-        setTimeout(() => {
-            setLoading(false);
-            router.replace('/(auth)/set-password'); // hoặc đi tới trang khác
-        }, 5000); // giả lập 2s loading
-    };
-
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Đặt lại mật khẩu</Text>
@@ -28,14 +62,14 @@ const LoginScreen = () => {
                     source={require('../../assets/images/auth/password.png')} // Adjust the path to your username icon
                     style={styles.inputIcon}
                 ></Image>
-                <TextInput style={styles.input} placeholder="Mật khẩu" secureTextEntry={true} placeholderTextColor="#404040" />
+                <TextInput style={styles.input} placeholder="Mật khẩu" secureTextEntry={true} placeholderTextColor="#404040" value={newPassword} onChangeText={setNewPassword} />
             </View>
             <View style={styles.inputContainer}>
                 <Image
                     source={require('../../assets/images/auth/password.png')} // Adjust the path to your username icon
                     style={styles.inputIcon}
                 ></Image>
-                <TextInput style={styles.input} placeholder="Xác nhận mật khẩu" secureTextEntry={true} placeholderTextColor="#404040" />
+                <TextInput style={styles.input} placeholder="Xác nhận mật khẩu" secureTextEntry={true} placeholderTextColor="#404040" value={rePassword} onChangeText={setRePassword} />
             </View>
 
             <View style={styles.groupButton}>
@@ -47,6 +81,13 @@ const LoginScreen = () => {
                     <Text style={styles.buttonText2}>Đặt lại mật khẩu</Text>
                 </TouchableOpacity>
             </View>
+            <SuccessModal
+                visible={modalVisible}
+                onClose={() => setModalVisible(false)}
+                type={"fail"}
+                title={"Thất bại!"}
+                message={"Mật khẩu không khớp."}
+            />
         </View>
     );
 };

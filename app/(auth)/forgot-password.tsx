@@ -1,11 +1,48 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { useRouter } from 'expo-router';
+import SuccessModal from "@/components/SuccessModel";
+import LoadingScreen from "@/components/LoadingScreen";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginScreen = () => {
     const router = useRouter();
     const [secureText1, setSecureText1] = useState(true);
     const [secureText2, setSecureText2] = useState(true);
+    const [email, setEmail] = useState("")
+    const [modalVisible, setModalVisible] = useState(false);
+    const [loading, setLoading] = useState(false)
+
+    const handleInputEmail = async () => {
+        setLoading(true)
+        try {
+            const response = await fetch("https://engflash-system-ngk.onrender.com/auth/forgot-password", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    email,
+                })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                await AsyncStorage.setItem("resetId", String(data.user_id));
+                setLoading(false)
+                router.replace('/(auth)/set-password');
+            }
+            else {
+                setLoading(false)
+                setModalVisible(true)
+            }
+        } catch (error) {
+            setLoading(false)
+        }
+    }
+    if (loading) {
+        return <LoadingScreen />
+    }
 
     return (
         <View style={styles.container}>
@@ -18,7 +55,7 @@ const LoginScreen = () => {
                     source={require('../../assets/images/auth/email.png')} // Adjust the path to your username icon
                     style={styles.inputIcon}
                 ></Image>
-                <TextInput style={styles.input} placeholder="Nhập email đã đăng ký" placeholderTextColor="#404040" />
+                <TextInput style={styles.input} placeholder="Nhập email đã đăng ký" placeholderTextColor="#404040" value={email} onChangeText={setEmail} />
             </View>
 
 
@@ -27,10 +64,17 @@ const LoginScreen = () => {
                     <Text style={styles.buttonText1}>Hủy</Text>
                 </TouchableOpacity>
                 <View style={{ width: 12 }}></View>
-                <TouchableOpacity style={styles.button2} onPress={() => router.replace('/(auth)/set-password')}>
+                <TouchableOpacity style={styles.button2} onPress={() => handleInputEmail()}>
                     <Text style={styles.buttonText2}>Lấy lại mật khẩu</Text>
                 </TouchableOpacity>
             </View>
+            <SuccessModal
+                visible={modalVisible}
+                onClose={() => setModalVisible(false)}
+                type={"fail"}
+                title={"Thất bại!"}
+                message={"Email chưa được đăng ký."}
+            />
         </View>
     );
 };
