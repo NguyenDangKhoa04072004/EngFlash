@@ -2,12 +2,12 @@ import { useState, useEffect } from "react";
 import { View, Text, StyleSheet, Image, Dimensions } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import LoadingScreen from "@/components/LoadingScreen";
 //Import thư viện biểu đồ
 import {
   BarChart,
   LineChart,
   PieChart,
-  PieChartPro,
 } from "react-native-gifted-charts";
 
 // Khai báo dữ liệu
@@ -17,84 +17,102 @@ const dataBarchart1 = [
   { value: 61, label: "Week 3", frontColor: "#FFD601" },
 ];
 
-const dataLinechart = [
-  { value: 6, label: "Mon" },
-  { value: 11, label: "Tue" },
-  { value: 8, label: "Wed" },
-  { value: 12, label: "Thu" },
-  { value: 18, label: "Fri" },
-  { value: 19, label: "Sat" },
-  { value: 16, label: "Sun" },
-];
-
-const dataBarchart2 = [
-  { value: 4, label: "Last 4", frontColor: "#2563EB" },
-  { value: 8, label: "Last 3", frontColor: "#93C5FD" },
-  { value: 12, label: "Last 2", frontColor: "#FACC15" },
-  { value: 16, label: "Last 1", frontColor: "#F87171" },
-  { value: 6, label: "Today", frontColor: "#DC2626" },
-];
-
-const dataPiechart = [
-  {
-    value: 35,
-    color: "#F472B6", // Hot Pink (cho "Đã học")
-    label: "35%\nĐã học",
-    labelStyle: { color: "deeppink", fontSize: 12, textAlign: "center" },
-    labelLineColor: "deeppink",
-    labelLineStrokeDashArray: [4, 2],
-    text: "35%\nĐã học",
-  },
-  {
-    value: 10,
-    color: "#F87171", // Salmon (cho "Đã ôn")
-    label: "10%\nĐã ôn",
-    labelStyle: { color: "red", fontSize: 12, textAlign: "center" },
-    labelLineColor: "red",
-    labelLineStrokeDashArray: [4, 2],
-  },
-  {
-    value: 35,
-    color: "#D4D4D4", // Light Grey (cho "Đang học")
-    label: "35%\nĐang học",
-    labelStyle: { color: "black", fontSize: 12, textAlign: "center" },
-    labelLineColor: "grey",
-    labelLineStrokeDashArray: [4, 2],
-  },
-  {
-    value: 20,
-    color: "#93C5FD", // Light Sky Blue (cho "Đang ôn")
-    label: "20%\nĐang ôn",
-    labelStyle: { color: "blue", fontSize: 12, textAlign: "center" },
-    labelLineColor: "blue",
-    labelLineStrokeDashArray: [4, 2], // Để tạo đường nối chấm chấm
-  },
-];
-
-const centerLabelComponent = () => {
+const CenterLabelComponent = ({ totalCard }: { totalCard: number }) => {
   return (
     <View style={{ justifyContent: "center", alignItems: "center" }}>
-      <Text style={{}}>Tổng Số</Text>
-      <Text style={{ marginBottom: 10 }}>Bộ Từ</Text>
-      <Text style={{}}>20/20</Text>
+      <Text style={{ fontFamily: "Regular", fontSize: 10 }}>Tổng Số</Text>
+      <Text style={{ fontFamily: "Regular", fontSize: 10, marginBottom: 10 }}>
+        Bộ Từ
+      </Text>
+      <Text style={{ fontFamily: "Regular", fontSize: 11.4 }}>
+        {totalCard}/{totalCard}
+      </Text>
     </View>
   );
 };
 
 const screenWidth = Dimensions.get("window").width; //Lấy chiều dài màn hình
 
-export default function Productivity() {
-  const [streak, setStreak] = useState(0); // ✅ đặt ở đây
-  const [totalCard, setTotalCard] = useState(0)
-  const [masterCard, setMasterCard] = useState(0)
 
+
+
+export default function Productivity() {
+  //Khai báo Hook
+  const [loading, setLoading] = useState(false)
+  const [streak, setStreak] = useState(0); // ✅ đặt ở đây
+  const [totalCard, setTotalCard] = useState(0);
+  const [masterCard, setMasterCard] = useState(0);
+  const [dataPiechart, setDataPiechart] = useState([
+    {
+      value: 25,
+      color: "#F472B6", // Hot Pink (cho "Đã học")
+    },
+    {
+      value: 25,
+      color: "#F87171", // Salmon (cho "Đã ôn")
+    },
+    {
+      value: 25,
+      color: "#D4D4D4", // Light Grey (cho "Đang học")
+    },
+    {
+      value: 25,
+      color: "#93C5FD", // Light Sky Blue (cho "Đang ôn")
+    },
+  ]);
+  const [percent, setPercent] = useState({
+    not_started: 0,
+    learning: 0,
+    learned: 0,
+    mastered: 0,
+  });
+  const [dataLinechart, setDataLineChart] = useState([
+    { value: 2, label: "Mon" },
+    { value: 2, label: "Tue" },
+    { value: 2, label: "Wed" },
+    { value: 2, label: "Thu" },
+    { value: 2, label: "Fri" },
+    { value: 2, label: "Sat" },
+    { value: 2, label: "Sun" },
+  ]);
+  const [dataBarchart2, setDataBarchart2] = useState([
+    {
+      value: 5,
+      label: "Last 4",
+      frontColor: "#2563EB",
+    },
+    {
+      value: 5,
+      label: "Last 3",
+      frontColor: "#93C5FD",
+    },
+    {
+      value: 5,
+      label: "Last 2",
+      frontColor: "#FACC15",
+    },
+    {
+      value: 5,
+      label: "Last 1",
+      frontColor: "#F87171",
+    },
+    {
+      value: 5,
+      label: "Today",
+      frontColor: "#DC2626",
+    },
+  ]);
+  // Kết thúc khai báo
+
+  //Chạy gọi API ngay khi màn hình render
   useEffect(() => {
     const getStreak = async () => {
+      setLoading(true)
       try {
         const accessToken = await AsyncStorage.getItem("accessToken");
         // Call API
         const response1 = await fetch(
-          "https://engflash-system.onrender.com/statistics/streak",
+          "https://engflash-system-ngk.onrender.com/statistics/streak",
           {
             method: "GET",
             headers: {
@@ -104,7 +122,27 @@ export default function Productivity() {
           }
         );
         const response2 = await fetch(
-          "https://engflash-system.onrender.com/statistics/proficient-cards",
+          "https://engflash-system-ngk.onrender.com/statistics/proficient-cards",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        const response3 = await fetch(
+          "https://engflash-system-ngk.onrender.com/statistics/learning-status",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        const response4 = await fetch(
+          "https://engflash-system-ngk.onrender.com/statistics/weekly-and-5days",
           {
             method: "GET",
             headers: {
@@ -120,23 +158,96 @@ export default function Productivity() {
           const data = await response1.json();
           setStreak(data.streak); // ✅ gán đúng giá trị từ response
         } else {
-          console.log("Không lấy được streak");
+          console.log("Không lấy được streak" + { accessToken });
         }
         if (response2.ok) {
           const data = await response2.json();
           setTotalCard(data.total_cards); // ✅ gán đúng giá trị từ response
-          setMasterCard(data.mastered_cards)
+          setMasterCard(data.mastered_cards);
         } else {
           console.log("Không lấy được Total Cards");
         }
+        if (response3.ok) {
+          const data = await response3.json();
+          const not_started = Number(data.not_started);
+          const learning = Number(data.learning);
+          const learned = Number(data.learned);
+          const mastered = Number(data.mastered);
+          const total_card = not_started + learning + learned + mastered || 1;
+          setPercent({
+            not_started: Math.round((not_started / total_card) * 100),
+            learning: Math.round((learning / total_card) * 100),
+            learned: Math.round((learned / total_card) * 100),
+            mastered: Math.round((mastered / total_card) * 100),
+          });
+          const dataDonut = [
+            {
+              value: Math.round((learned / total_card) * 100),
+              color: "#F472B6", // Hot Pink (cho "Đã học")
+            },
+            {
+              value: Math.round((mastered / total_card) * 100),
+              color: "#F87171", // Salmon (cho "Đã ôn")
+            },
+            {
+              value: Math.round((learning / total_card) * 100),
+              color: "#D4D4D4", // Light Grey (cho "Đang học")
+            },
+            {
+              value: Math.round((not_started / total_card) * 100),
+              color: "#93C5FD", // Light Sky Blue (cho "Đang ôn")
+            },
+          ];
+          setDataPiechart(dataDonut);
+        } else {
+          console.log("Không lấy được Leardning Status");
+        }
+        if (response4.ok) {
+          const data = await response4.json();
+          setDataLineChart([
+            { value: data.thisWeekStats[0].count, label: "Mon" },
+            { value: data.thisWeekStats[1].count, label: "Tue" },
+            { value: data.thisWeekStats[2].count, label: "Wed" },
+            { value: data.thisWeekStats[3].count, label: "Thu" },
+            { value: data.thisWeekStats[4].count, label: "Fri" },
+            { value: data.thisWeekStats[5].count, label: "Sat" },
+            { value: data.thisWeekStats[6].count, label: "Sun" },
+          ]);
 
-
-
-
-
+          setDataBarchart2([
+            {
+              value: data.last5DaysStats[0].count,
+              label: "Last 4",
+              frontColor: "#2563EB",
+            },
+            {
+              value: data.last5DaysStats[1].count,
+              label: "Last 3",
+              frontColor: "#93C5FD",
+            },
+            {
+              value: data.last5DaysStats[2].count,
+              label: "Last 2",
+              frontColor: "#FACC15",
+            },
+            {
+              value: data.last5DaysStats[3].count,
+              label: "Last 1",
+              frontColor: "#F87171",
+            },
+            {
+              value: data.last5DaysStats[4].count,
+              label: "Today",
+              frontColor: "#DC2626",
+            },
+          ]);
+        } else {
+          console.log("Không lấy giá trị của tuần này và 5 ngày gần đây");
+        }
       } catch (error) {
         console.log("Lỗi khi lấy dữ liệu:", error);
       }
+      setLoading(false)
     };
 
     getStreak(); // ✅ gọi khi component mount
@@ -144,6 +255,7 @@ export default function Productivity() {
 
 
 
+  if (loading) return <LoadingScreen />
   return (
     <ScrollView
       style={{ backgroundColor: "#fff" }}
@@ -226,17 +338,57 @@ export default function Productivity() {
       <Text style={styles.label}>Tuần vừa qua</Text>
 
       <View style={styles.chartContainer}>
-        <PieChart
-          data={dataPiechart}
-          donut
-          radius={110}
-          innerRadius={70}
-          centerLabelComponent={centerLabelComponent}
-          labelsPosition="outward"
-          strokeColor="white"
-          strokeWidth={4}
-          showTextBackground
-        />
+        <View style={{ flexDirection: "row" }}>
+          <View
+            style={{
+              flexDirection: "column",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <Text
+              style={{ fontSize: 10, fontFamily: "Regular", color: "#93C5FD" }}
+            >
+              {"    "}
+              {percent.not_started}%{"\n"}Đang ôn
+            </Text>
+            <Text
+              style={{ fontSize: 10, fontFamily: "Regular", color: "#D4D4D4" }}
+            >
+              {"    "}
+              {percent.learning}%{"\n"}Đang học
+            </Text>
+          </View>
+          <PieChart
+            data={dataPiechart}
+            donut
+            radius={110}
+            innerRadius={70}
+            centerLabelComponent={() => (
+              <CenterLabelComponent totalCard={Number(totalCard)} />
+            )}
+            labelsPosition="outward"
+            strokeColor="white"
+            strokeWidth={4}
+            showTextBackground
+          />
+          <View
+            style={{ flexDirection: "column", justifyContent: "space-between" }}
+          >
+            <Text
+              style={{ fontSize: 10, fontFamily: "Regular", color: "#F472B6" }}
+            >
+              {"    "}
+              {percent.learned}%{"\n"}Đã học
+            </Text>
+            <Text
+              style={{ fontSize: 10, fontFamily: "Regular", color: "#F87171" }}
+            >
+              {"    "}
+              {percent.mastered}%{"\n"}Đã ôn
+            </Text>
+          </View>
+        </View>
       </View>
       <Text style={styles.label}>Thống kê theo bộ từ</Text>
 
