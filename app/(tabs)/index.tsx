@@ -1,40 +1,56 @@
-import { useEvent } from "expo";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { useVideoPlayer, VideoView } from "expo-video";
+import TopicCard from "@/components/TopicCard";
+import { useEffect, useState } from "react";
+import api from "@/services";
+import LoadingScreen from "@/components/LoadingScreen";
 
-import TopicCard from "@/components/StudyTab/TopicCard";
+interface Topic {
+  topic_id: number;
+  topic_name: string;
+  topic_description: string;
+  is_default: boolean;
+}
 
 const videoSource =
   "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
 
 export default function HomeScreen() {
+  const [topics, setTopics] = useState<Topic[]>([]);
+  const [isloading, setIsLoading] = useState(false);
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const res = await api.get("topics");
+        setTopics(res.data.topics);
+        setIsLoading(false);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    fetchData();
+  }, []);
   const player = useVideoPlayer(videoSource, (player) => {
     player.loop = false;
     player.pause();
   });
 
+  if(isloading) return <LoadingScreen/>
+
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.title}>Học theo chủ đề</Text>
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-      >
-        <TopicCard
-          title="Clothes"
-          description="Bộ sưu tập mặc định"
-          color="#FCCFE8"
-        />
-        <TopicCard
-          title="Clothes"
-          description="Bộ sưu tập mặc định"
-          color="#FCCFE8"
-        />
-        <TopicCard
-          title="Clothes"
-          description="Bộ sưu tập mặc định"
-          color="#FCCFE8"
-        />
+      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        {topics.map((topic) => (
+          <TopicCard
+            key={topic.topic_id}
+            id={topic.topic_id}
+            title={topic.topic_name}
+            description={topic.topic_description}
+            color="#FCCFE8"
+          />
+        ))}
       </ScrollView>
       <Text style={styles.title}>Học theo chủ đề</Text>
       <View style={styles.videoWrapper}>
@@ -53,9 +69,9 @@ export default function HomeScreen() {
             backgroundColor: "#FBCFE8",
             position: "absolute",
             bottom: 0,
-            borderBottomLeftRadius:10,
-            borderBottomRightRadius:10,
-            boxShadow: '2px 2px 10px rgba(0, 0, 0, 0.25)'
+            borderBottomLeftRadius: 10,
+            borderBottomRightRadius: 10,
+            boxShadow: "2px 2px 10px rgba(0, 0, 0, 0.25)",
           }}
         >
           <Text style={styles.videoTitle}>600 TỪ VỰNG TOEIC CƠ BẢN</Text>

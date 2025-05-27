@@ -32,7 +32,7 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
-        name='study'
+        name='study/[id]'
         options={{
           href: null,
           tabBarStyle: {

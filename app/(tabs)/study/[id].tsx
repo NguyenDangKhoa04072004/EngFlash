@@ -1,37 +1,45 @@
-import DraggableView from "@/components/StudyTab/DraggableView";
+import DraggableView from "@/components/DraggableView";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { navigate } from "expo-router/build/global-state/routing";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Modal, StyleSheet, Text, View } from "react-native";
 import { Button } from "react-native-elements";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import DeleteModal from "@/components/StudyTab/DeleteModal";
-
+import DeleteModal from "@/components/DeleteModal";
+import { useLocalSearchParams } from "expo-router";
+import api from "@/services";
+import { Card } from "@/interface/card";
+import LoadingScreen from "@/components/LoadingScreen";
 
 export default function StudyScreen() {
-  const [vocabularies, setVocabularies] = useState([
-    {
-      word: "hello",
-      meaning: "Xin chào",
-      sentence: "Hello, Paul. I haven't seen you for ages.",
-    },
-    { word: "hi", meaning: "Xin chào", sentence: "Hi, how are you doing?" },
-    {
-      word: "clothes",
-      meaning: "Quần áo",
-      sentence: "She usually wears smart clothes.",
-    },
-    {
-      word: "hot",
-      meaning: "Nóng",
-      sentence: "It's too hot in here, can we turn down the heating?",
-    },
-  ]);
+  const { id } = useLocalSearchParams();
+  const [cards, setCards] = useState<Card[]>([]);
+  const [isloading, setIsLoading] = useState(false);
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const res = await api.get(`topics/${id}/cards`);
+        setCards(res.data.cards);
+        setIsLoading(false);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    fetchData();
+  }, [id]);
 
   const [onDragRight, setOnDragRight] = useState<boolean>(false);
   const [onDragLeft, setOnDragLeft] = useState<boolean>(false);
   const [onDelete, setOnDelete] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
+
+  const handleWipeCard = () => {
+    
+  }
+
+  if (isloading) return <LoadingScreen />;
+
   return (
     <View
       style={{
@@ -42,7 +50,11 @@ export default function StudyScreen() {
         borderLeftColor: onDragLeft ? "#DC2626" : "none",
       }}
     >
-      <DeleteModal visible={showModal} setVisible={setShowModal} deleteVocabulary={() => setVocabularies(vocabularies.slice(1))}/>
+      <DeleteModal
+        visible={showModal}
+        setVisible={setShowModal}
+        deleteVocabulary={() => setCards(cards.slice(1))}
+      />
       <View style={styles.heading}>
         <MaterialIcons
           name="navigate-before"
@@ -58,8 +70,8 @@ export default function StudyScreen() {
         dragRight={setOnDragRight}
         dragDelete={setOnDelete}
         showModal={setShowModal}
-        vocabularies={vocabularies}
-        setVocabularies={setVocabularies}
+        vocabularies={cards}
+        setVocabularies={setCards}
       />
       <Button
         title={"+"}

@@ -91,7 +91,7 @@ export default function Index() {
 
   const handleFinishOnboarding = async () => {
     await AsyncStorage.setItem(STORAGE_KEY, "true");
-    router.replace("/(tabs)");
+    router.replace("/(auth)/login");
   };
 
   if (loading) {

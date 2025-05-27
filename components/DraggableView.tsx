@@ -7,18 +7,15 @@ import Animated, {
 } from "react-native-reanimated";
 import Feather from "@expo/vector-icons/Feather";
 import { useState } from "react";
+import { Card } from "@/interface/card";
 
 
 
-interface vocabulary{
-    word: string;
-    meaning: string,
-    sentence: string,
-}
+
 interface Props {
-  vocabularies: vocabulary[];
+  vocabularies: Card[];
   showModal: React.Dispatch<React.SetStateAction<boolean>>;
-  setVocabularies: React.Dispatch<React.SetStateAction<vocabulary[]>>;
+  setVocabularies: React.Dispatch<React.SetStateAction<Card[]>>;
   dragLeft: React.Dispatch<React.SetStateAction<boolean>>;
   dragRight: React.Dispatch<React.SetStateAction<boolean>>;
   dragDelete: React.Dispatch<React.SetStateAction<boolean>>;
@@ -157,20 +154,20 @@ export default function DraggableView({
                     </Animated.View>
                     <View style={styles.contentWrapper}>
                       <Feather name="volume-2" size={24} color="blue" />
-                      <Text style={styles.vocabulary}>{vocabulary.word}</Text>
+                      <Text style={styles.vocabulary}>{vocabulary.front_text}</Text>
                     </View>
                     {showMeaning && (
                       <>
                         <View>
                           <Text style={styles.meaning}>
-                            {vocabulary.meaning}
+                            {vocabulary.back_text}
                           </Text>
                         </View>
                         <View style={styles.horizontalBar} />
                         <View style={styles.sentenceWrapper}>
                           <Feather name="volume-2" size={24} color="blue" />
                           <Text style={styles.sentence}>
-                            {vocabulary.sentence}
+                            {vocabulary.example}
                           </Text>
                         </View>
                       </>
@@ -195,7 +192,7 @@ export default function DraggableView({
             >
               <View style={styles.cardBottom} key={index}>
                 <Feather name="volume-2" size={24} color="blue" />
-                <Text style={styles.vocabulary}>{vocabulary.word}</Text>
+                <Text style={styles.vocabulary}>{vocabulary.front_text}</Text>
               </View>
             </View>
           );
