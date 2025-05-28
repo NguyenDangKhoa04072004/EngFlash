@@ -13,12 +13,17 @@ import LoadingScreen from "@/components/LoadingScreen";
 import { Keyboard } from "react-native";
 
 import SuccessModal from "@/components/SuccessModel";
+import { ScrollView } from "react-native-gesture-handler";
 
 const CreateCardVideo = () => {
     const router = useRouter();
     const [showLoading, setShowLoading] = useState(false);
     const [showResult, setshowResult] = useState(false);
     const [videoUrl, setVideoUrl] = useState("");
+
+    const [showTooltip, setShowTooltip] = useState(false);
+    const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
+    const [selectedWord, setSelectedWord] = useState("");
 
     const handlePress = () => {
         setShowLoading(true);
@@ -27,7 +32,7 @@ const CreateCardVideo = () => {
         setTimeout(() => {
             setShowLoading(false);
             setshowResult(true);
-        }, 3000);
+        }, 1000);
     };
 
     return (
@@ -98,8 +103,8 @@ const CreateCardVideo = () => {
                     <TouchableOpacity
                         style={{
                             position: "absolute",
-                            bottom: 20,
-                            right: 20,
+                            bottom: 0,
+                            right: 0,
                         }}
                         onPress={() => {
                             router.replace("/(create_card)/create-collection");
@@ -107,52 +112,143 @@ const CreateCardVideo = () => {
                     >
                         <Image source={require("@/assets/images/create_card/plus.png")} />
                     </TouchableOpacity>
-                    <View style={{ marginTop: 40 }}>
-                        <View style={styles.word}>
-                            <Image
-                                source={require("@/assets/images/create_card/volume.png")}
-                            />
-                            <Text
-                                style={{ fontFamily: "Regular", fontSize: 20, marginLeft: 20 }}
-                            >
-                                <Text style={{ color: "#15803D" }}>to </Text>chill out
-                            </Text>
-                        </View>
-                        <View style={styles.word}>
-                            <Image
-                                source={require("@/assets/images/create_card/volume.png")}
-                            />
-                            <Text
-                                style={{ fontFamily: "Regular", fontSize: 20, marginLeft: 20 }}
-                            >
-                                <Text style={{ color: "#15803D" }}>to </Text>chill out
-                            </Text>
-                        </View>
-                        <View style={styles.word}>
-                            <Image
-                                source={require("@/assets/images/create_card/volume.png")}
-                            />
-                            <Text
-                                style={{ fontFamily: "Regular", fontSize: 20, marginLeft: 20 }}
-                            >
-                                <Text style={{ color: "#15803D" }}>to </Text>chill out
-                            </Text>
-                        </View>
-                        <View style={styles.word}>
-                            <Image
-                                source={require("@/assets/images/create_card/volume.png")}
-                            />
-                            <Text
-                                style={{ fontFamily: "Regular", fontSize: 20, marginLeft: 20 }}
-                            >
-                                join a{" "}
-                                <Text style={{ color: "#DC2626", fontFamily: "Bold" }}>
-                                    conversation
+                    <ScrollView>
+                        <View style={{ marginTop: 40 }}>
+                            <View style={styles.word}>
+                                <Image
+                                    source={require("@/assets/images/create_card/volume.png")}
+                                />
+                                <Text
+                                    style={{ fontFamily: "Regular", fontSize: 20, marginLeft: 20 }}
+                                >
+                                    <Text style={{ color: "#15803D" }}>to </Text>chill out
                                 </Text>
-                            </Text>
+                            </View>
+                            <View style={styles.word}>
+                                <Image
+                                    source={require("@/assets/images/create_card/volume.png")}
+                                />
+                                <Text
+                                    style={{ fontFamily: "Regular", fontSize: 20, marginLeft: 20 }}
+                                >
+                                    <Text style={{ color: "#15803D" }}>to </Text>chill out
+                                </Text>
+                            </View>
+                            <View style={styles.word}>
+                                <Image
+                                    source={require("@/assets/images/create_card/volume.png")}
+                                />
+                                <Text
+                                    style={{ fontFamily: "Regular", fontSize: 20, marginLeft: 20 }}
+                                >
+                                    <Text style={{ color: "#15803D" }}>to </Text>chill out
+                                </Text>
+                            </View>
+                            <View style={styles.word}>
+                                <Image
+                                    source={require("@/assets/images/create_card/volume.png")}
+                                />
+                                <Text
+                                    style={{ fontFamily: "Regular", fontSize: 20, marginLeft: 20 }}
+                                >
+                                    join a{" "}
+                                    <Text
+                                        style={{ color: "#DC2626", fontFamily: "Bold" }}
+                                        onLayout={(event) => {
+                                            const { x, y } = event.nativeEvent.layout;
+                                            setTooltipPosition({ x, y });
+                                        }}
+                                        onPress={() => {
+                                            setSelectedWord("conversation");
+                                            setShowTooltip(true);
+                                        }}
+                                    >
+                                        conversation
+                                    </Text>
+                                </Text>
+                            </View>
                         </View>
-                    </View>
+                    </ScrollView>
                 </>
+            )}
+
+            {showTooltip && (
+                <View
+                    style={{
+                        position: "absolute",
+                        top: tooltipPosition.y + 260, // +30 để dưới chữ một chút
+                        left: tooltipPosition.x + 100,
+                        backgroundColor: "#FFF",
+                        width: 225,
+                        borderRadius: 8,
+                        shadowColor: "#000",
+                        shadowOffset: { width: 0, height: 2 },
+                        shadowOpacity: 0.3,
+                        shadowRadius: 4,
+                        elevation: 5,
+                        zIndex: 100,
+                    }}
+                >
+                    <View
+                        style={{
+                            height: 36,
+                            backgroundColor: "#DB2777",
+                            borderTopLeftRadius: 8,
+                            borderTopRightRadius: 8,
+                            position: "relative",
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                            padding: 5,
+                            paddingHorizontal: 15,
+                            alignItems: "center"
+                        }}
+                    >
+                        <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
+                            <Image
+                                source={require("@/assets/images/create_card/calendar.png")}
+                            />
+                            <Text style={{ fontFamily: "Regular", fontSize: 12, color: "#FDFDFD", marginLeft: 5, marginTop: 2 }}>Add words</Text>
+                        </View>
+                        <TouchableOpacity onPress={() => setShowTooltip(false)}>
+                            <Image
+                                source={require("@/assets/images/create_card/delete.png")}
+
+                            />
+                        </TouchableOpacity>
+                    </View>
+                    <View style={{ height: 51, flexDirection: "row", alignItems: "center", paddingLeft: 15 }}>
+                        <Image
+                            source={require("@/assets/images/create_card/green_circle.png")}
+
+                        />
+                        <Text style={{ fontSize: 16, fontFamily: "Regular", marginLeft: 15 }}>
+                            {selectedWord}
+                        </Text>
+                    </View>
+                    <View
+                        style={{
+                            width: 205,
+                            height: 2,
+                            backgroundColor: "#000000",
+                            alignSelf: "center"
+                        }}
+                    />
+                    <View style={{ height: 51, flexDirection: "row", alignItems: "center", paddingLeft: 15 }}>
+                        <Image
+                            source={require("@/assets/images/create_card/pink_circle.png")}
+
+                        />
+                        <Text style={{ fontSize: 12, fontFamily: "Regular", marginLeft: 15 }}>
+                            cuộc hội thoại
+                        </Text>
+                        <TouchableOpacity onPress={() => { router.replace("/(tabs)/addcard") }}>
+                            <Image
+                                source={require("@/assets/images/create_card/plus.png")}
+                                style={{ width: 50, height: 50, marginLeft: 45 }}
+                            />
+                        </TouchableOpacity>
+                    </View>
+                </View>
             )}
         </View>
     );
