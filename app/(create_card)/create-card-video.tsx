@@ -11,29 +11,79 @@ import {
 import { useRouter } from "expo-router";
 import LoadingScreen from "@/components/LoadingScreen";
 import { Keyboard } from "react-native";
-
-import SuccessModal from "@/components/SuccessModel";
 import { ScrollView } from "react-native-gesture-handler";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const CreateCardVideo = () => {
     const router = useRouter();
     const [showLoading, setShowLoading] = useState(false);
     const [showResult, setshowResult] = useState(false);
     const [videoUrl, setVideoUrl] = useState("");
+    const [videoCaptionUrl, setCaptionVideoUrl] = useState("");
 
     const [showTooltip, setShowTooltip] = useState(false);
     const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
-    const [selectedWord, setSelectedWord] = useState("");
+    const [selectedWord1, setSelectedWord1] = useState("");
+    const [selectedWord2, setSelectedWord2] = useState("");
+    const [captions, setCaptions] = useState<string[]>([]);
 
-    const handlePress = () => {
+
+
+    const handlePress = async () => {
         setShowLoading(true);
         setshowResult(false);
+        const accessToken = await AsyncStorage.getItem("accessToken");
+        try {
+            const response = await fetch(
+                "https://engflash-system-ngk.onrender.com/topics/from-video",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                    body: JSON.stringify({
+                        url: videoUrl
+                    })
+                }
+            );
 
-        setTimeout(() => {
+            if (response.ok) {
+                const responseData = await response.json()
+                setCaptionVideoUrl(responseData.captionUrl)
+                setShowLoading(false)
+                setshowResult(true)
+            } else {
+                setShowLoading(false);
+                console.log("Không thể lấy caption");
+            }
+        } catch (error) {
             setShowLoading(false);
-            setshowResult(true);
-        }, 1000);
-    };
+            console.log("Gặp lỗi khi lấy caption");
+        }
+
+
+
+
+        try {
+            const response = await fetch('https://res.cloudinary.com/djjbvhmjf/raw/upload/v1748160873/captions/2UkYJTfaT8E.vtt');
+            const text = await response.text();
+            const cleanText = text.replace(/^WEBVTT[\s\S]*?\n/, "");
+            const blocks = cleanText
+                .split('\n\n')
+                .map(block => {
+                    const lines = block.split('\n').filter(line => !line.includes('-->'));
+                    return lines.join(' ');
+                })
+                .filter(Boolean); // lọc những đoạn trống
+
+            setCaptions(blocks);
+        } catch (err) {
+            console.error('Lỗi khi fetch VTT:', err);
+        }
+
+    }
+
 
     return (
         <View style={styles.container}>
@@ -114,44 +164,13 @@ const CreateCardVideo = () => {
                     </TouchableOpacity>
                     <ScrollView>
                         <View style={{ marginTop: 40 }}>
-                            <View style={styles.word}>
-                                <Image
-                                    source={require("@/assets/images/create_card/volume.png")}
-                                />
-                                <Text
-                                    style={{ fontFamily: "Regular", fontSize: 20, marginLeft: 20 }}
-                                >
-                                    <Text style={{ color: "#15803D" }}>to </Text>chill out
-                                </Text>
-                            </View>
-                            <View style={styles.word}>
-                                <Image
-                                    source={require("@/assets/images/create_card/volume.png")}
-                                />
-                                <Text
-                                    style={{ fontFamily: "Regular", fontSize: 20, marginLeft: 20 }}
-                                >
-                                    <Text style={{ color: "#15803D" }}>to </Text>chill out
-                                </Text>
-                            </View>
-                            <View style={styles.word}>
-                                <Image
-                                    source={require("@/assets/images/create_card/volume.png")}
-                                />
-                                <Text
-                                    style={{ fontFamily: "Regular", fontSize: 20, marginLeft: 20 }}
-                                >
-                                    <Text style={{ color: "#15803D" }}>to </Text>chill out
-                                </Text>
-                            </View>
-                            <View style={styles.word}>
-                                <Image
-                                    source={require("@/assets/images/create_card/volume.png")}
-                                />
-                                <Text
-                                    style={{ fontFamily: "Regular", fontSize: 20, marginLeft: 20 }}
-                                >
-                                    join a{" "}
+                            {captions.map((text, index) => (
+
+
+                                <View key={index} style={styles.word}>
+                                    <Image
+                                        source={require("@/assets/images/create_card/volume.png")}
+                                    />
                                     <Text
                                         style={{ color: "#DC2626", fontFamily: "Bold" }}
                                         onLayout={(event) => {
@@ -159,14 +178,16 @@ const CreateCardVideo = () => {
                                             setTooltipPosition({ x, y });
                                         }}
                                         onPress={() => {
-                                            setSelectedWord("conversation");
+                                            setSelectedWord1(text);
+                                            setSelectedWord2("Test nha")
                                             setShowTooltip(true);
                                         }}
                                     >
-                                        conversation
+                                        {text}
                                     </Text>
-                                </Text>
-                            </View>
+                                </View>
+
+                            ))}
                         </View>
                     </ScrollView>
                 </>
@@ -221,8 +242,8 @@ const CreateCardVideo = () => {
                             source={require("@/assets/images/create_card/green_circle.png")}
 
                         />
-                        <Text style={{ fontSize: 16, fontFamily: "Regular", marginLeft: 15 }}>
-                            {selectedWord}
+                        <Text style={{ fontSize: 16, fontFamily: "Regular", marginLeft: 15, paddingRight: 15 }}>
+                            {selectedWord1}
                         </Text>
                     </View>
                     <View
@@ -238,13 +259,13 @@ const CreateCardVideo = () => {
                             source={require("@/assets/images/create_card/pink_circle.png")}
 
                         />
-                        <Text style={{ fontSize: 12, fontFamily: "Regular", marginLeft: 15 }}>
-                            cuộc hội thoại
+                        <Text style={{ fontSize: 12, fontFamily: "Regular", marginLeft: 15, paddingRight: 10 }}>
+                            {selectedWord2}
                         </Text>
                         <TouchableOpacity onPress={() => { router.replace("/(tabs)/addcard") }}>
                             <Image
                                 source={require("@/assets/images/create_card/plus.png")}
-                                style={{ width: 50, height: 50, marginLeft: 45 }}
+                                style={{ width: 50, height: 50, right: -70 }}
                             />
                         </TouchableOpacity>
                     </View>
