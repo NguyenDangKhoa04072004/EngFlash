@@ -1,4 +1,5 @@
-import { View, Text, ScrollView, StyleSheet, Image, Pressable } from 'react-native';
+import { router } from 'expo-router';
+import { View, Text, ScrollView, StyleSheet, Image, Pressable, TouchableOpacity } from 'react-native';
 
 const notifications = [
   {
@@ -43,9 +44,9 @@ export default function NotificationScreen() {
             </View>
 
             {item.active ?
-              (<Pressable style={styles.button}>
+              (<TouchableOpacity style={styles.button} onPress={() => router.replace("/(tabs)")}>
                 <Text style={styles.buttonText}>GO!</Text>
-              </Pressable>) :
+              </TouchableOpacity>) :
               (<Pressable style={[styles.button, { backgroundColor: '#ffff' }]} disabled={true}>
                 <Text style={styles.buttonText}></Text>
               </Pressable>)}

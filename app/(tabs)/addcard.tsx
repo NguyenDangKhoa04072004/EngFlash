@@ -66,11 +66,6 @@ const AddCard = () => {
 
   const handleSubmit = async () => {
     setLoading(true);
-    if (topicId == null) {
-      setShowModalFail(true)
-      setLoading(false)
-      return
-    }
     const accessToken = await AsyncStorage.getItem("accessToken");
     try {
       const response = await fetch(

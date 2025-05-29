@@ -11,19 +11,69 @@ import { useRouter } from "expo-router";
 import SuccessModal from "@/components/SuccessModel";
 import { ScrollView } from "react-native-gesture-handler";
 import { Dropdown } from "react-native-element-dropdown";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import LoadingScreen from "@/components/LoadingScreen";
 
 const CreateCollection = () => {
     const router = useRouter();
-
+    const [loading, setLoading] = useState(false)
     const [showModal, setShowModal] = useState(false);
+    const [showFailModal, setShowFailModal] = useState(false);
     const data = [
         { label: "Easy", value: "easy" },
         { label: "Medium", value: "medium" },
         { label: "Hard", value: "hard" },
     ];
 
-    const [wordType, setWordType] = useState(null);
+    const [type, setType] = useState("medium");
+    const [name, setName] = useState("")
 
+
+    const handle = async () => {
+        setLoading(true)
+        if (!name.trim()) {
+            setLoading(false)
+            setShowFailModal(true);
+            return;
+        }
+        const videoCaptionUrl = await AsyncStorage.getItem('videoCaptionUrl')
+        const accessToken = await AsyncStorage.getItem("accessToken");
+
+        try {
+            const response = await fetch(
+                "https://engflash-system-ngk.onrender.com/topics/from-script",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                    body: JSON.stringify({
+                        url: videoCaptionUrl,
+                        level: type,
+                        topic_name: name
+                    })
+                }
+            );
+
+            if (response.ok) {
+                setLoading(false)
+                setShowModal(true)
+            } else {
+                setLoading(false)
+                setShowFailModal(true)
+            }
+        } catch (error) {
+            setLoading(false)
+            setShowFailModal(true)
+            console.log("Gặp lỗi:" + error)
+        }
+    }
+
+
+
+
+    if (loading) return <LoadingScreen />
     return (
         <ScrollView
             contentContainerStyle={styles.container}
@@ -52,14 +102,14 @@ const CreateCollection = () => {
                     data={data}
                     labelField="label"
                     valueField="value"
-                    value={wordType}
-                    onChange={(item) => setWordType(item.value)}
+                    value={type}
+                    onChange={(item) => setType(item.value)}
                 />
             </View>
 
             <View style={styles.containerInput}>
                 <Text style={styles.label}>Tên collection</Text>
-                <TextInput style={styles.input} />
+                <TextInput style={styles.input} value={name} onChangeText={setName} />
             </View>
 
             <View style={styles.AI}>
@@ -88,7 +138,7 @@ const CreateCollection = () => {
                     height: 40,
                     marginBottom: 15,
                 }}
-                onPress={() => setShowModal(true)}
+                onPress={() => handle()}
             >
                 <Text
                     style={{
@@ -102,6 +152,7 @@ const CreateCollection = () => {
                 </Text>
             </TouchableOpacity>
             <SuccessModal visible={showModal} onClose={() => setShowModal(false)} type={"success"} title={"Tạo collection thành công!"} message={""} />
+            <SuccessModal visible={showFailModal} onClose={() => setShowFailModal(false)} type={"fail"} title={"Tạo collection thất bại!"} message={""} />
         </ScrollView>
     );
 };

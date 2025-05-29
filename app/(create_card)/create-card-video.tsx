@@ -50,9 +50,27 @@ const CreateCardVideo = () => {
 
             if (response.ok) {
                 const responseData = await response.json()
-                setCaptionVideoUrl(responseData.captionUrl)
+                const temp = responseData.captionUrl
+                setCaptionVideoUrl(temp)
+                await AsyncStorage.setItem('videoCaptionUrl', temp)
                 setShowLoading(false)
                 setshowResult(true)
+                try {
+                    const response = await fetch(temp);
+                    const text = await response.text();
+                    const cleanText = text.replace(/^WEBVTT[\s\S]*?\n/, "");
+                    const blocks = cleanText
+                        .split('\n\n')
+                        .map(block => {
+                            const lines = block.split('\n').filter(line => !line.includes('-->'));
+                            return lines.join(' ');
+                        })
+                        .filter(Boolean); // lọc những đoạn trống
+
+                    setCaptions(blocks);
+                } catch (err) {
+                    console.error('Lỗi khi fetch VTT:', err);
+                }
             } else {
                 setShowLoading(false);
                 console.log("Không thể lấy caption");
@@ -62,27 +80,10 @@ const CreateCardVideo = () => {
             console.log("Gặp lỗi khi lấy caption");
         }
 
-
-
-
-        try {
-            const response = await fetch('https://res.cloudinary.com/djjbvhmjf/raw/upload/v1748160873/captions/2UkYJTfaT8E.vtt');
-            const text = await response.text();
-            const cleanText = text.replace(/^WEBVTT[\s\S]*?\n/, "");
-            const blocks = cleanText
-                .split('\n\n')
-                .map(block => {
-                    const lines = block.split('\n').filter(line => !line.includes('-->'));
-                    return lines.join(' ');
-                })
-                .filter(Boolean); // lọc những đoạn trống
-
-            setCaptions(blocks);
-        } catch (err) {
-            console.error('Lỗi khi fetch VTT:', err);
-        }
-
     }
+
+
+
 
 
     return (
@@ -140,6 +141,11 @@ const CreateCardVideo = () => {
                 </View>
             )}
 
+
+            {/* Show kết quả */}
+
+
+
             {showResult && (
                 <>
                     <View style={styles.container_webview}>
@@ -150,18 +156,7 @@ const CreateCardVideo = () => {
                             source={{ uri: videoUrl }}
                         />
                     </View>
-                    <TouchableOpacity
-                        style={{
-                            position: "absolute",
-                            bottom: 0,
-                            right: 0,
-                        }}
-                        onPress={() => {
-                            router.replace("/(create_card)/create-collection");
-                        }}
-                    >
-                        <Image source={require("@/assets/images/create_card/plus.png")} />
-                    </TouchableOpacity>
+
                     <ScrollView>
                         <View style={{ marginTop: 40 }}>
                             {captions.map((text, index) => (
@@ -172,7 +167,7 @@ const CreateCardVideo = () => {
                                         source={require("@/assets/images/create_card/volume.png")}
                                     />
                                     <Text
-                                        style={{ color: "#DC2626", fontFamily: "Bold" }}
+                                        style={{ color: "#000000", fontFamily: "Bold" }}
                                         onLayout={(event) => {
                                             const { x, y } = event.nativeEvent.layout;
                                             setTooltipPosition({ x, y });
@@ -190,8 +185,28 @@ const CreateCardVideo = () => {
                             ))}
                         </View>
                     </ScrollView>
+                    <TouchableOpacity
+                        onPress={() => {
+                            router.replace("/(create_card)/create-collection");
+                        }}
+                    >
+                        <Image
+                            source={require("@/assets/images/create_card/plus.png")}
+                            style={{
+                                position: "absolute",
+                                bottom: -10,
+                                right: -10,
+                            }}
+                        />
+                    </TouchableOpacity>
                 </>
             )}
+
+
+
+
+            {/* Show popup */}
+
 
             {showTooltip && (
                 <View
