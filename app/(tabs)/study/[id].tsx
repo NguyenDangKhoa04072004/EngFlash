@@ -34,9 +34,40 @@ export default function StudyScreen() {
   const [onDelete, setOnDelete] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
 
-  const handleWipeCard = () => {
-    
-  }
+  const handleLearningCard = async (
+    card_id: number,
+    rating: "again" | "good"
+  ) => {
+    try {
+      setCards(cards.slice(1));
+      const res = await api.post("cards/learn", {
+        card_id,
+        rating,
+      });
+      if (res.status !== 201) {
+        const [firstCard, ...restCard] = cards;
+        setCards([...restCard, firstCard]);
+      } 
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  //   const handleDeleteCard = async (card_id : number) => {
+  //      try {
+  //       const res = await api.delete("cards/learn", {
+  //         card_id,
+  //       });
+  //       if(res.status === 201){
+  //         setCards(cards.slice(1))
+  //       }else{
+  //         const [firstCard, ...restCard] = cards
+  //         setCards([...restCard,firstCard])
+  //       }
+  //     } catch (e) {
+  //       console.log(e);
+  //     }
+  //   }
 
   if (isloading) return <LoadingScreen />;
 
@@ -72,6 +103,7 @@ export default function StudyScreen() {
         showModal={setShowModal}
         vocabularies={cards}
         setVocabularies={setCards}
+        learnCard={handleLearningCard}
       />
       <Button
         title={"+"}

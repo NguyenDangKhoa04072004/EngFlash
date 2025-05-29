@@ -9,9 +9,6 @@ import Feather from "@expo/vector-icons/Feather";
 import { useState } from "react";
 import { Card } from "@/interface/card";
 
-
-
-
 interface Props {
   vocabularies: Card[];
   showModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -19,6 +16,7 @@ interface Props {
   dragLeft: React.Dispatch<React.SetStateAction<boolean>>;
   dragRight: React.Dispatch<React.SetStateAction<boolean>>;
   dragDelete: React.Dispatch<React.SetStateAction<boolean>>;
+  learnCard: (card_id: number, rating: "again" | "good") => void;
 }
 
 export default function DraggableView({
@@ -27,7 +25,8 @@ export default function DraggableView({
   dragDelete,
   vocabularies,
   setVocabularies,
-  showModal
+  showModal,
+  learnCard,
 }: Props) {
   const [showMeaning, setShowMeaning] = useState<boolean>(false);
   const translateX = useSharedValue(0);
@@ -67,8 +66,12 @@ export default function DraggableView({
         (translateX.value < -150 || translateX.value > 150) &&
         translateY.value < 200
       ) {
-        runOnJS(setVocabularies)(vocabularies.slice(1));
-        runOnJS(setShowMeaning)(false)
+        if(translateX.value < -150){
+            runOnJS(learnCard)(vocabularies[0].card_id,"again");
+        }else{
+            runOnJS(learnCard)(vocabularies[0].card_id,"good"); 
+        }
+        runOnJS(setShowMeaning)(false);
       }
 
       if (
@@ -76,7 +79,7 @@ export default function DraggableView({
         translateY.value > 200
       ) {
         runOnJS(showModal)(true);
-        runOnJS(setShowMeaning)(false)
+        runOnJS(setShowMeaning)(false);
       }
 
       translateX.value = 0;
@@ -154,7 +157,9 @@ export default function DraggableView({
                     </Animated.View>
                     <View style={styles.contentWrapper}>
                       <Feather name="volume-2" size={24} color="blue" />
-                      <Text style={styles.vocabulary}>{vocabulary.front_text}</Text>
+                      <Text style={styles.vocabulary}>
+                        {vocabulary.front_text}
+                      </Text>
                     </View>
                     {showMeaning && (
                       <>
