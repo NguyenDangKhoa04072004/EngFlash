@@ -1,5 +1,6 @@
 {
   "expo": {
+    "owner": "mobileapphcmut",
     "name": "EngFlash-V2",
     "slug": "EngFlash-V2",
     "version": "1.0.0",
@@ -15,7 +16,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.quangpro0166.EngFlashV2"
     },
     "web": {
       "bundler": "metro",
@@ -38,19 +40,17 @@
     "experiments": {
       "typedRoutes": true
     },
-    "extra": {
-      "router": {
-        "origin": false
-      },
-      "eas": {
-        "projectId": "eed5d397-6146-491f-963a-d7f7847c4d3b"
-      }
-    },
     "runtimeVersion": {
       "policy": "appVersion"
     },
     "updates": {
-      "url": "https://u.expo.dev/eed5d397-6146-491f-963a-d7f7847c4d3b"
+      "url": "https://u.expo.dev/6e0d3528-99c9-417b-b33a-03b48acb9372"
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "6e0d3528-99c9-417b-b33a-03b48acb9372"
+      }
     }
   }
 }
