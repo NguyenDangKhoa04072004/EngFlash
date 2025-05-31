@@ -2,7 +2,7 @@
   "expo": {
     "owner": "mobileapphcmut",
     "name": "EngFlash",
-    "slug": "EngFlash",
+    "slug": "EngFlash-V2",
     "orientation": "portrait",
     "icon": "./assets/images/logo.png",
     "scheme": "myapp",
@@ -33,7 +33,7 @@
         "expo-splash-screen",
         {
           "image": "./assets/images/splash-screen.png",
-          "enableFullScreenImage_legacy":true,
+          "enableFullScreenImage_legacy": true,
           "resizeMode": "cover",
           "backgroundColor": "#ff0000"
         }
