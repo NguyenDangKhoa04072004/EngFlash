@@ -35,7 +35,12 @@ export default function DeleteModal({
                 color="red"
               />
             </View>
-            <Feather name="x" size={25} color="black" onPress={() => setVisible(false)}/>
+            <Feather
+              name="x"
+              size={25}
+              color="black"
+              onPress={() => setVisible(false)}
+            />
           </View>
           <View style={styles.contentWrapper}>
             <Text style={styles.title}>Xoá thẻ</Text>

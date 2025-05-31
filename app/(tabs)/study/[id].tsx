@@ -13,8 +13,9 @@ import LoadingScreen from "@/components/LoadingScreen";
 
 export default function StudyScreen() {
   const { id } = useLocalSearchParams();
-  const router = useRouter()
+  const router = useRouter();
   const [cards, setCards] = useState<Card[]>([]);
+  const [topicName, setTopicName] = useState("")
   const [isloading, setIsLoading] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
@@ -22,6 +23,7 @@ export default function StudyScreen() {
       try {
         const res = await api.get(`topics/${id}/cards`);
         setCards(res.data.cards);
+        setTopicName(res.data.topic.topic_name)
         setIsLoading(false);
       } catch (e) {
         console.log(e);
@@ -48,27 +50,27 @@ export default function StudyScreen() {
       if (res.status !== 201) {
         const [firstCard, ...restCard] = cards;
         setCards([...restCard, firstCard]);
-      } 
+      }
     } catch (e) {
       console.log(e);
     }
   };
 
-  //   const handleDeleteCard = async (card_id : number) => {
-  //      try {
-  //       const res = await api.delete("cards/learn", {
-  //         card_id,
-  //       });
-  //       if(res.status === 201){
-  //         setCards(cards.slice(1))
-  //       }else{
-  //         const [firstCard, ...restCard] = cards
-  //         setCards([...restCard,firstCard])
-  //       }
-  //     } catch (e) {
-  //       console.log(e);
-  //     }
-  //   }
+  const handleDeleteCard = async (card_id: number) => {
+    setIsLoading(true)
+    try {
+      const res = await api.delete(`cards/${card_id}`);
+      if (res.status === 200) {
+        setCards(cards.slice(1));
+        setIsLoading(false)
+      } else {
+        const [firstCard, ...restCard] = cards;
+        setCards([...restCard, firstCard]);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   if (isloading) return <LoadingScreen />;
 
@@ -85,7 +87,7 @@ export default function StudyScreen() {
       <DeleteModal
         visible={showModal}
         setVisible={setShowModal}
-        deleteVocabulary={() => setCards(cards.slice(1))}
+        deleteVocabulary={() => handleDeleteCard(cards[0]?.card_id)}
       />
       <View style={styles.heading}>
         <MaterialIcons
@@ -95,7 +97,7 @@ export default function StudyScreen() {
           style={{ position: "absolute", left: 30 }}
           onPress={() => router.replace("/(tabs)")}
         />
-        <Text style={styles.header}>Clothes - Học tập</Text>
+        <Text style={styles.header}>{topicName} - Học tập</Text>
       </View>
       <DraggableView
         dragLeft={setOnDragLeft}
