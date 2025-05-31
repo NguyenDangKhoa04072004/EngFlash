@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import api from "@/services";
 import LoadingScreen from "@/components/LoadingScreen";
 
+
 interface Topic {
   topic_id: number;
   topic_name: string;
@@ -22,7 +23,7 @@ export default function HomeScreen() {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const res = await api.get("topics",);
+        const res = await api.get("topics");
         setTopics(res.data.topics);
         setIsLoading(false);
       } catch (e) {
@@ -36,9 +37,8 @@ export default function HomeScreen() {
     player.pause();
   });
 
+  if (isloading) return <LoadingScreen />;
 
-  if(isloading) return <LoadingScreen/>
-  
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.title}>Học theo chủ đề</Text>

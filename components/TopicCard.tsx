@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet } from "react-native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import { navigate } from "expo-router/build/global-state/routing";
+import { useRouter } from "expo-router";
 interface Props {
   id: number;
   title: string;
@@ -8,7 +8,8 @@ interface Props {
   color: string;
 }
 
-export default function TopicCard({id, title, description, color }: Props) {
+export default function TopicCard({ id, title, description, color }: Props) {
+  const router = useRouter();
   return (
     <View style={{ ...styles.container, backgroundColor: color }}>
       <View style={styles.contentWrapper}>
@@ -41,7 +42,7 @@ export default function TopicCard({id, title, description, color }: Props) {
             }}
           />
           <MaterialCommunityIcons
-            onPress={() => navigate(`/(tabs)/study/${id}`)}
+            onPress={() => router.replace(`/(tabs)/study/${id}`)}
             name="arrow-right-box"
             size={40}
             color="black"

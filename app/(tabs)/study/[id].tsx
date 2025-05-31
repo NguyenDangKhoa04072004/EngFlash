@@ -6,13 +6,14 @@ import { Modal, StyleSheet, Text, View } from "react-native";
 import { Button } from "react-native-elements";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import DeleteModal from "@/components/DeleteModal";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import api from "@/services";
 import { Card } from "@/interface/card";
 import LoadingScreen from "@/components/LoadingScreen";
 
 export default function StudyScreen() {
   const { id } = useLocalSearchParams();
+  const router = useRouter()
   const [cards, setCards] = useState<Card[]>([]);
   const [isloading, setIsLoading] = useState(false);
   useEffect(() => {
@@ -92,7 +93,7 @@ export default function StudyScreen() {
           size={35}
           color="black"
           style={{ position: "absolute", left: 30 }}
-          onPress={() => navigate("/(tabs)")}
+          onPress={() => router.replace("/(tabs)")}
         />
         <Text style={styles.header}>Clothes - Học tập</Text>
       </View>
