@@ -16,15 +16,17 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
+
 SplashScreen.setOptions({
-  duration: 1000,
-  fade: true,
-});
+    duration: 1000,
+    fade: true
+})
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [isAuth, setIsAuth] = useState(false);
-  const [isCheckingAuth, setIsCheckingAuth] = useState(false);
+  const [onBoarding, setOnBoarding] = useState(false);
+  const [isCheckingState, setIsCheckingState] = useState(false);
   const [loaded] = useFonts({
     // SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
     Regular: require("../assets/fonts/BeVietnamPro-Regular.ttf"),
@@ -46,23 +48,38 @@ export default function RootLayout() {
     }
   };
 
+  const checkOnBoarding = async () => {
+    try {
+      const hasSeenOnboarding = await AsyncStorage.getItem("hasSeenOnboarding");
+      if (hasSeenOnboarding == "true") {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      console.log(e);
+      return false;
+    }
+  };
+
   useEffect(() => {
-    if (loaded && isCheckingAuth) {
+    if (loaded && isCheckingState) {
       SplashScreen.hideAsync();
     }
-  }, [loaded, isCheckingAuth]);
+  }, [loaded, isCheckingState]);
 
   useEffect(() => {
     const initAuth = async () => {
-      const result = await checkAuth();
-      console.log(result);
-      setIsAuth(result);
-      setIsCheckingAuth(true);
+      const authCheck = await checkAuth();
+      const onBoardingCheck = await checkOnBoarding();
+      setIsAuth(authCheck);
+      setOnBoarding(onBoardingCheck);
+      setIsCheckingState(true);
     };
     initAuth();
   }, []);
 
-  if (!loaded || !isCheckingAuth) {
+  if (!loaded || !isCheckingState) {
     return null;
   }
 
@@ -72,7 +89,7 @@ export default function RootLayout() {
         <ThemeProvider
           value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
         >
-          <RootNavigator />
+          <RootNavigator onBoarding={onBoarding} />
           <StatusBar style="auto" />
         </ThemeProvider>
       </GestureHandlerRootView>
@@ -80,24 +97,32 @@ export default function RootLayout() {
   );
 }
 
-const RootNavigator = () => {
+interface Props {
+  onBoarding: boolean;
+}
+
+const RootNavigator = ({ onBoarding }: Props) => {
   const { isAuth } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (!isAuth) {
-      router.replace("/(auth)/login");
+    if (!onBoarding) {
+      router.replace("/");
     } else {
-      router.replace("/(tabs)");
+      if (!isAuth) {
+        router.replace("/(auth)/login");
+      } else {
+        router.replace("/(tabs)");
+      }
     }
   }, [isAuth]);
   return (
     <Stack>
+      <Stack.Screen
+        name="index"
+        options={{ headerShown: false, navigationBarHidden: true }}
+      />
       <Stack.Protected guard={!isAuth}>
-        <Stack.Screen
-          name="index"
-          options={{ headerShown: false, navigationBarHidden: true }}
-        />
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />
         <Stack.Screen name="+not-found" />
       </Stack.Protected>
