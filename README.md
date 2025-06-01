@@ -10,13 +10,22 @@ trong việc xây dựng vốn từ vựng một cách hiệu quả.
 
 ## Install
 
-1. Install dependencies
+1. clone the repo
+
+
+2. cd to EngFlash directory
+   
+    ```bash
+   cd EngFlash
+   ```
+
+3. Install dependencies
 
    ```bash
    npm install
    ```
 
-2. Start the app
+4. Start the app
 
    ```bash
     npx expo start
