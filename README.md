@@ -59,4 +59,4 @@ You can start developing by editing the files inside the **app** directory. This
 </div>
 
 ## Demo
-![Video demo](https://github.com/user-attachments/assets/6327a29d-d5f8-40fd-8584-93cc8dc9f224)
+![Video demo](https://github.com/user-attachments/assets/350fb071-c6bc-4462-bc9c-56917c782085)
