@@ -36,7 +36,7 @@ trong việc xây dựng vốn từ vựng một cách hiệu quả.
 
 In the output, you'll find options to open the app in a
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
+- [development build](https://github.com/user-attachments/assets/350fb071-c6bc-4462-bc9c-56917c782085)
 - [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
 - [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
 - [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
