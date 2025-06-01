@@ -38,10 +38,10 @@ You can start developing by editing the files inside the **app** directory. This
 
 ## Main Screens
 <div>
-    <img src="demo/study-screen.png" style="width:200;">
-    <img src="demo/learning-screen.png" style="width:200;">
-    <img src="demo/addcard-screen.png" style="width:200;"> 
-    <img src="demo/topics-screen.png" style="width:200;">
-    <img src="demo/productivity-screen.png" style="width:200;"> 
-    <img src="demo/other-screen.png" style="width:200;"> 
+    <img src="demo/study-screen.png" style="width:150;">
+    <img src="demo/learning-screen.png" style="width:150;">
+    <img src="demo/addcard-screen.png" style="width:150;"> 
+    <img src="demo/topics-screen.png" style="width:150;">
+    <img src="demo/productivity-screen.png" style="width:150;"> 
+    <img src="demo/other-screen.png" style="width:150;"> 
 </div>
