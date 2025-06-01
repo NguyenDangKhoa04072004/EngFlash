@@ -47,4 +47,4 @@ You can start developing by editing the files inside the **app** directory. This
 </div>
 
 ## Demo
-![Video demo](https://github.com/NguyenDangKhoa04072004/EngFlash/issues/1)
+![Video demo](https://github.com/user-attachments/assets/fbbe116b-0034-42b2-878d-327cf8cd3748)
