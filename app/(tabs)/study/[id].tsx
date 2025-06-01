@@ -97,7 +97,7 @@ export default function StudyScreen() {
           style={{ position: "absolute", left: 30 }}
           onPress={() => router.replace("/(tabs)")}
         />
-        <Text style={styles.header}>{topicName} - Học tập</Text>
+        <Text style={styles.header}>{topicName}</Text>
       </View>
       <DraggableView
         dragLeft={setOnDragLeft}

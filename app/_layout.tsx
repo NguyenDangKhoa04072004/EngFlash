@@ -110,7 +110,7 @@ const RootNavigator = ({ onBoarding }: Props) => {
       router.replace("/");
     } else {
       if (!isAuth) {
-        router.replace("/(auth)/login");
+        router.replace("/(auth)");
       } else {
         router.replace("/(tabs)");
       }
