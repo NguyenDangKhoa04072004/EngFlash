@@ -1,8 +1,14 @@
-# Welcome to your Expo app 👋
+# EngFlash - Học tiếng anh khoa học qua Flashcard (Frontend)
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
-## Get started
+EngFlash mang đến một giải pháp học tiếng Anh toàn diện với thẻ ghi nhớ. Ứng dụng không chỉ sử
+dụng công nghệ flashcard và thuật toán spaced repetition để tối ưu hóa quá trình ghi nhớ mà còn tích
+hợp các tính năng thông báo tự động và trích xuất collection từ video, giúp mở rộng phạm vi học tập
+và cập nhật kiến thức theo thời gian thực. EngFlash giúp đáp ứng nhu cầu ngày càng cao của người học
+trong việc xây dựng vốn từ vựng một cách hiệu quả.
+
+
+## Install
 
 1. Install dependencies
 
@@ -25,26 +31,17 @@ In the output, you'll find options to open the app in a
 
 You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
 
-## Get a fresh project
+## Onboarding Screens
 
-When you're ready, run:
+| ![Onboarding Screen 1](demo/onboarding-1.png) | ![Onboarding Screen 2](demo/onboarding-2.png) | ![Onboarding Screen 3](demo/onboarding-3.png)| ![Onboarding Screen 4](demo/onboarding-4.png)|
+|:------------------------------:|:------------------------------:|:------------------------------:|:------------------------------:|
 
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## Main Screens
+<div>
+    <img src="demo/study-screen.png" style="width:200;">
+    <img src="demo/learning-screen.png" style="width:200;">
+    <img src="demo/addcard-screen.png" style="width:200;"> 
+    <img src="demo/topics-screen.png" style="width:200;">
+    <img src="demo/productivity-screen.png" style="width:200;"> 
+    <img src="demo/other-screen.png" style="width:200;"> 
+</div>

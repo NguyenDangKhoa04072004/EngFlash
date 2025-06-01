@@ -112,6 +112,7 @@ export default function StudyScreen() {
         title={"+"}
         buttonStyle={styles.addBtn}
         containerStyle={styles.btnCotainer}
+        onPress={() => router.replace("/(tabs)/addcard")}
       />
       {onDelete && (
         <View style={styles.deletingWrapper}>
