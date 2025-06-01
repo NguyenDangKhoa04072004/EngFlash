@@ -10,10 +10,13 @@ trong việc xây dựng vốn từ vựng một cách hiệu quả.
 
 ## Install
 
-1. clone the repo
+1. Clone the repo
 
+ ```bash
+   git clone https://github.com/NguyenDangKhoa04072004/EngFlash.git
+   ```
 
-2. cd to EngFlash directory
+2. Move to EngFlash directory
    
     ```bash
    cd EngFlash
