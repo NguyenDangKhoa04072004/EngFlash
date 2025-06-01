@@ -45,3 +45,6 @@ You can start developing by editing the files inside the **app** directory. This
     <img src="demo/productivity-screen.png" style="width:50;"> 
     <img src="demo/other-screen.png" style="width:50;"> 
 </div>
+
+## Demo
+![Video demo](https://github.com/NguyenDangKhoa04072004/EngFlash/issues/1)
