@@ -53,8 +53,9 @@ const LoginScreen = () => {
                 })
             });
             if (!response.ok) {
+                const data = await response.json()
                 setLoading(false)
-                setMessage("Email đã tồn tại. Vui lòng sử\ndụng email khác.");
+                setMessage(data.message[1]);
                 setModalFailVisible(true)
             }
             else {
