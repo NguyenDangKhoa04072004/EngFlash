@@ -13,14 +13,18 @@
       "bundleIdentifier": "com.quangpro0166.EngFlashV2",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
-      }
+      },
+      "runtimeVersion": "1.0.0"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.quangpro0166.EngFlashV2"
+      "package": "com.quangpro0166.EngFlashV2",
+      "runtimeVersion": {
+        "policy": "appVersion"
+      }
     },
     "web": {
       "bundler": "metro",
