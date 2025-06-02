@@ -55,7 +55,7 @@ const LoginScreen = () => {
             if (!response.ok) {
                 const data = await response.json()
                 setLoading(false)
-                setMessage(data.message[1]);
+                setMessage(data.message[0]);
                 setModalFailVisible(true)
             }
             else {
