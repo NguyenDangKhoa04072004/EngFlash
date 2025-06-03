@@ -14,7 +14,7 @@ trong việc xây dựng vốn từ vựng một cách hiệu quả.
 - 🎨[Behance](https://www.behance.net/gallery/222850193/Engflash)
 
 
-## Install
+## Installation
 
 1. Clone the repo
 
