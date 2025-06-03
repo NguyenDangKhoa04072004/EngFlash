@@ -8,6 +8,11 @@ và cập nhật kiến thức theo thời gian thực. EngFlash giúp đáp ứ
 trong việc xây dựng vốn từ vựng một cách hiệu quả.
 
 
+
+## Demo
+![Video demo](https://github.com/user-attachments/assets/350fb071-c6bc-4462-bc9c-56917c782085)
+![Behance](https://www.behance.net/gallery/222850193/Engflash)
+
 ## Install
 
 1. Clone the repo
@@ -57,6 +62,3 @@ You can start developing by editing the files inside the **app** directory. This
     <img src="demo/productivity-screen.png" style="width:50;"> 
     <img src="demo/other-screen.png" style="width:50;"> 
 </div>
-
-## Demo
-![Video demo](https://github.com/user-attachments/assets/350fb071-c6bc-4462-bc9c-56917c782085)
