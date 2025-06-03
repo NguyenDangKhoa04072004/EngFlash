@@ -49,8 +49,6 @@ In the output, you'll find options to open the app in a
 - [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
 - [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
 ## Onboarding Screens
 
 | ![Onboarding Screen 1](demo/onboarding-1.png) | ![Onboarding Screen 2](demo/onboarding-2.png) | ![Onboarding Screen 3](demo/onboarding-3.png)| ![Onboarding Screen 4](demo/onboarding-4.png)|
