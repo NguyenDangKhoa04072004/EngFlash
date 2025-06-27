@@ -22,25 +22,25 @@ trong việc xây dựng vốn từ vựng một cách hiệu quả.
 
  ```bash
    git clone https://github.com/NguyenDangKhoa04072004/EngFlash.git
-   ```
+ ```
 
 2. Move to EngFlash directory
    
-    ```bash
+ ```bash
    cd EngFlash
-   ```
+ ```
 
 3. Install dependencies
 
-   ```bash
+ ```bash
    npm install
-   ```
+ ```
 
 4. Start the app
 
-   ```bash
+ ```bash
     npx expo start
-   ```
+ ```
 
 In the output, you'll find options to open the app in a
 
